@@ -6,15 +6,20 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "api:types": "openapi-typescript https://food-delivery.uz/v3/api-docs -o app/lib/api/schema.d.ts"
   },
   "dependencies": {
     "@react-router/node": "7.12.0",
     "@react-router/serve": "7.12.0",
+    "@tanstack/react-query": "^5.90.21",
+    "@telegram-apps/sdk-react": "^3.3.9",
+    "axios": "^1.13.6",
     "isbot": "^5.1.31",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-router": "7.12.0"
+    "react-router": "7.12.0",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@react-router/dev": "7.12.0",
@@ -22,6 +27,7 @@
     "@types/node": "^22",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "openapi-typescript": "^7.4.4",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",
