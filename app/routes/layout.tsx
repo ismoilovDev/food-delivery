@@ -1,24 +1,24 @@
-import { Outlet, useNavigate } from "react-router";
 import { useEffect } from "react";
-import { useAuthStore } from "~/store/authStore";
+import { Outlet, useNavigate } from "react-router";
 import { BottomNav } from "~/components/bottom-nav";
+import { useAuthStore } from "~/store/authStore";
 
 export default function AppLayout() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const navigate = useNavigate();
+	const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+	const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/", { replace: true });
-    }
-  }, [isAuthenticated, navigate]);
+	useEffect(() => {
+		if (!isAuthenticated) {
+			navigate("/", { replace: true });
+		}
+	}, [isAuthenticated, navigate]);
 
-  if (!isAuthenticated) return null;
+	if (!isAuthenticated) return null;
 
-  return (
-    <div className="min-h-screen bg-gray-50 pb-16">
-      <Outlet />
-      <BottomNav />
-    </div>
-  );
+	return (
+		<div className="min-h-screen bg-gray-50 pb-16">
+			<Outlet />
+			<BottomNav />
+		</div>
+	);
 }

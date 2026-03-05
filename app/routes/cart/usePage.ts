@@ -1,3 +1,3 @@
 export function useCartPage() {
-  return {};
+	return {};
 }
