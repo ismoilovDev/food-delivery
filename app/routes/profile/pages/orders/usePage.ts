@@ -1,3 +1,3 @@
 export function useOrdersPage() {
-  return {};
+	return {};
 }

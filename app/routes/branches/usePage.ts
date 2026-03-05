@@ -1,3 +1,3 @@
 export function useBranchesPage() {
-  return {};
+	return {};
 }

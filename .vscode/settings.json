@@ -1,0 +1,10 @@
+{
+	"tailwindCSS.experimental.configFile": "app/app.css",
+	"tailwindCSS.classFavoriteMode": "enabled",
+	"editor.quickSuggestions": {
+		"strings": "on"
+	},
+	"css.validate": false,
+	"css.lint.unknownAtRules": "ignore",
+	"biome.enabled": true
+}
