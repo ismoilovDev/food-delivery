@@ -2,7 +2,7 @@ import type { I18nText } from "./common";
 
 export interface CategoryDto {
   id: number;
-  name: I18nText;
+  name: string;
   nameStr: string;
   description: I18nText;
   imageUrl?: string;
