@@ -35,7 +35,7 @@ export function useProductDetailPage() {
 		} else {
 			updateCartItem.mutate({
 				itemId: cartItem.id,
-				body: { quantity: cartItem.quantity + 1 },
+				quantity: cartItem.quantity + 1,
 			});
 		}
 	}
@@ -47,7 +47,7 @@ export function useProductDetailPage() {
 		} else {
 			updateCartItem.mutate({
 				itemId: cartItem.id,
-				body: { quantity: cartItem.quantity - 1 },
+				quantity: cartItem.quantity - 1,
 			});
 		}
 	}

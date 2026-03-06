@@ -19,6 +19,6 @@ export async function getCategoryChildren(parentId: number) {
 }
 
 export async function getRootCategories() {
-	const res = await api.get<ApiResponse<CategoryDto[]>>("/api/categories/roots");
+	const res = await api.get<ApiResponse<CategoryDto[]>>("/api/categories/root");
 	return res.data;
 }

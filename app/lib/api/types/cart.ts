@@ -1,22 +1,26 @@
 export interface CartItemDto {
 	id: number;
+	cartId: number;
 	productId: number;
 	productName: string;
-	quantity: number;
+	productImage?: string;
 	price: number;
-	notes?: string;
+	quantity: number;
+	totalPrice: number;
+	isAvailable: boolean;
 }
 
 export interface CartDto {
 	id: number;
 	userId: number;
-	restaurantId?: number;
+	userName?: string;
 	items: CartItemDto[];
-	subtotal: number;
-	discountAmount: number;
-	deliveryFee: number;
-	promocodeCode?: string;
 	totalAmount: number;
+	itemsCount: number;
+	promocodeCode?: string;
+	discountAmount: number;
+	finalAmount: number;
+	createdAt: string;
 	updatedAt: string;
 }
 
