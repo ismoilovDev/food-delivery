@@ -8,12 +8,30 @@ import {
 	removePromocode,
 	updateCartItem,
 } from "../services/cart";
-import type { ApplyPromocodeReqDto, CartItemReqDto } from "../types";
+import type {
+	ApiResponse,
+	ApplyPromocodeReqDto,
+	CartDto,
+	CartItemDto,
+	CartItemReqDto,
+} from "../types";
 
 export const cartKeys = {
 	all: ["cart"] as const,
 	my: () => [...cartKeys.all, "my"] as const,
 };
+
+type CartCache = ApiResponse<CartDto> | undefined;
+
+function patchCartCache(
+	queryClient: ReturnType<typeof useQueryClient>,
+	updater: (items: CartItemDto[]) => CartItemDto[]
+) {
+	queryClient.setQueryData<CartCache>(cartKeys.my(), (old) => {
+		if (!old?.data) return old;
+		return { ...old, data: { ...old.data, items: updater(old.data.items) } };
+	});
+}
 
 export function useCart() {
 	return useQuery({
@@ -34,9 +52,20 @@ export function useAddCartItem() {
 export function useUpdateCartItem() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: ({ itemId, body }: { itemId: number; body: Partial<CartItemReqDto> }) =>
-			updateCartItem(itemId, body),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.my() }),
+		mutationFn: ({ itemId, quantity }: { itemId: number; quantity: number }) =>
+			updateCartItem(itemId, quantity),
+		onMutate: async ({ itemId, quantity }) => {
+			await queryClient.cancelQueries({ queryKey: cartKeys.my() });
+			const previous = queryClient.getQueryData<CartCache>(cartKeys.my());
+			patchCartCache(queryClient, (items) =>
+				items.map((item) => (item.id === itemId ? { ...item, quantity } : item))
+			);
+			return { previous };
+		},
+		onError: (_err, _vars, ctx) => {
+			if (ctx?.previous) queryClient.setQueryData(cartKeys.my(), ctx.previous);
+		},
+		onSettled: () => queryClient.invalidateQueries({ queryKey: cartKeys.my() }),
 	});
 }
 
@@ -44,7 +73,16 @@ export function useRemoveCartItem() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: (itemId: number) => removeCartItem(itemId),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.my() }),
+		onMutate: async (itemId) => {
+			await queryClient.cancelQueries({ queryKey: cartKeys.my() });
+			const previous = queryClient.getQueryData<CartCache>(cartKeys.my());
+			patchCartCache(queryClient, (items) => items.filter((item) => item.id !== itemId));
+			return { previous };
+		},
+		onError: (_err, _vars, ctx) => {
+			if (ctx?.previous) queryClient.setQueryData(cartKeys.my(), ctx.previous);
+		},
+		onSettled: () => queryClient.invalidateQueries({ queryKey: cartKeys.my() }),
 	});
 }
 
@@ -68,6 +106,15 @@ export function useClearCart() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: clearCart,
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.my() }),
+		onMutate: async () => {
+			await queryClient.cancelQueries({ queryKey: cartKeys.my() });
+			const previous = queryClient.getQueryData<CartCache>(cartKeys.my());
+			patchCartCache(queryClient, () => []);
+			return { previous };
+		},
+		onError: (_err, _vars, ctx) => {
+			if (ctx?.previous) queryClient.setQueryData(cartKeys.my(), ctx.previous);
+		},
+		onSettled: () => queryClient.invalidateQueries({ queryKey: cartKeys.my() }),
 	});
 }

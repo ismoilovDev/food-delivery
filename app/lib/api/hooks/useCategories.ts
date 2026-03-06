@@ -8,7 +8,7 @@ import {
 
 export const categoryKeys = {
 	all: ["categories"] as const,
-	roots: () => [...categoryKeys.all, "roots"] as const,
+	root: () => [...categoryKeys.all, "root"] as const,
 	list: (params?: { page?: number; limit?: number; parentId?: number }) =>
 		[...categoryKeys.all, "list", params] as const,
 	detail: (id: number) => [...categoryKeys.all, id] as const,
@@ -25,7 +25,7 @@ export function useCategories(params?: { page?: number; limit?: number; parentId
 
 export function useRootCategories() {
 	return useQuery({
-		queryKey: categoryKeys.roots(),
+		queryKey: categoryKeys.root(),
 		queryFn: getRootCategories,
 		select: (res) => res.data,
 	});

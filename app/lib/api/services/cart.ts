@@ -11,8 +11,10 @@ export async function addCartItem(body: CartItemReqDto) {
 	return res.data;
 }
 
-export async function updateCartItem(itemId: number, body: Partial<CartItemReqDto>) {
-	const res = await api.put<ApiResponse<CartDto>>(`/api/cart/items/${itemId}`, body);
+export async function updateCartItem(itemId: number, quantity: number) {
+	const res = await api.put<ApiResponse<CartDto>>(`/api/cart/items/${itemId}`, null, {
+		params: { quantity },
+	});
 	return res.data;
 }
 

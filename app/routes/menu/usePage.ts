@@ -52,7 +52,7 @@ export function useMenuPage() {
 		} else {
 			updateCartItem.mutate({
 				itemId: item.id,
-				body: { quantity: item.quantity + 1 },
+				quantity: item.quantity + 1,
 			});
 		}
 	}
@@ -65,7 +65,7 @@ export function useMenuPage() {
 		} else {
 			updateCartItem.mutate({
 				itemId: item.id,
-				body: { quantity: item.quantity - 1 },
+				quantity: item.quantity - 1,
 			});
 		}
 	}
