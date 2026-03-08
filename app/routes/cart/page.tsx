@@ -1,10 +1,12 @@
 import { Loader2, Trash2 } from "lucide-react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { formatPrice } from "~/lib/format";
-import { AddressRow } from "./components/address-row";
+import { AddressPickerModal } from "./components/address-picker-modal";
+import { AddressSection } from "./components/address-section";
 import { CartItem } from "./components/cart-item";
 import { CartSummary } from "./components/cart-summary";
 import { EmptyCart } from "./components/empty-cart";
+import { PromoSection } from "./components/promo-section";
 import { useCartPage } from "./usePage";
 
 export default function CartPage() {
@@ -12,18 +14,34 @@ export default function CartPage() {
 		t,
 		cart,
 		isLoading,
-		defaultAddress,
+		addresses,
+		selectedAddressId,
+		isPickerOpen,
+		note,
+		setNote,
+		promoInput,
+		setPromoInput,
+		promoError,
+		appliedPromo,
+		isApplyingPromo,
+		isRemovingPromo,
+		handleApplyPromo,
+		handleRemovePromo,
 		isEmpty,
 		canOrder,
 		isOrdering,
 		isClearing,
+		isSavingAddress,
 		subtotal,
 		discount,
-		deliveryFee,
 		total,
 		handleIncrement,
 		handleDecrement,
 		handleClear,
+		handleSelectAddress,
+		handleOpenPicker,
+		handleClosePicker,
+		handleSaveAddress,
 		handlePlaceOrder,
 	} = useCartPage();
 
@@ -59,8 +77,17 @@ export default function CartPage() {
 				/>
 			) : (
 				<div className="flex flex-col gap-3 px-4 pt-4">
-					{/* Address */}
-					<AddressRow address={defaultAddress} selectLabel={t.cart.selectAddress} />
+					{/* Address section */}
+					<AddressSection
+						addresses={addresses}
+						selectedId={selectedAddressId}
+						onSelect={handleSelectAddress}
+						onAddNew={handleOpenPicker}
+						t={{
+							addressSection: t.cart.addressSection,
+							addAddress: t.cart.addAddress,
+						}}
+					/>
 
 					{/* Items */}
 					<div className="flex flex-col gap-2">
@@ -75,10 +102,44 @@ export default function CartPage() {
 						))}
 					</div>
 
+					{/* Note */}
+					<div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+						<div className="px-4 pt-3.5 pb-2">
+							<h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+								{t.cart.notes}
+							</h2>
+						</div>
+						<textarea
+							value={note}
+							onChange={(e) => setNote(e.target.value)}
+							placeholder={t.cart.notesPlaceholder}
+							rows={3}
+							className="w-full px-4 pb-3.5 text-sm text-gray-800 placeholder-gray-400 resize-none outline-none"
+						/>
+					</div>
+
+					{/* Promo */}
+					<PromoSection
+						input={promoInput}
+						appliedPromo={appliedPromo}
+						error={promoError}
+						isApplying={isApplyingPromo}
+						isRemoving={isRemovingPromo}
+						onInputChange={setPromoInput}
+						onApply={handleApplyPromo}
+						onRemove={handleRemovePromo}
+						t={{
+							promo: t.cart.promo,
+							promoPlaceholder: t.cart.promoPlaceholder,
+							apply: t.cart.apply,
+							remove: t.cart.remove,
+						}}
+					/>
+
 					{/* Summary */}
 					<CartSummary
 						subtotal={subtotal}
-						deliveryFee={deliveryFee}
+						deliveryFee={0}
 						discount={discount}
 						total={total}
 						t={{
@@ -114,6 +175,20 @@ export default function CartPage() {
 					</button>
 				</div>
 			)}
+
+			{/* Address picker modal */}
+			<AddressPickerModal
+				isOpen={isPickerOpen}
+				onClose={handleClosePicker}
+				onSave={handleSaveAddress}
+				isSaving={isSavingAddress}
+				t={{
+					pickLocation: t.cart.pickLocation,
+					useCurrentLocation: t.cart.useCurrentLocation,
+					confirmAddress: t.cart.confirmAddress,
+					loadingAddress: t.cart.loadingAddress,
+				}}
+			/>
 		</div>
 	);
 }
@@ -121,7 +196,7 @@ export default function CartPage() {
 function CartSkeleton() {
 	return (
 		<div className="flex flex-col gap-3 px-4 pt-4">
-			<Skeleton className="h-14 w-full rounded-2xl" />
+			<Skeleton className="h-32 w-full rounded-2xl" />
 			<div className="flex flex-col gap-2">
 				{[1, 2, 3].map((i) => (
 					<Skeleton key={i} className="h-20 w-full rounded-2xl" />

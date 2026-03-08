@@ -1,4 +1,4 @@
-import { Home, MapPin, ShoppingCart, User } from "lucide-react";
+import { Home, ShoppingCart, User } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { useCart } from "~/lib/api/hooks/useCart";
 import { useI18nStore } from "~/store/i18nStore";
@@ -12,7 +12,6 @@ export function BottomNav() {
 
 	const tabs = [
 		{ to: "/menu", icon: Home, label: t.nav.menu },
-		{ to: "/branches", icon: MapPin, label: t.nav.branches },
 		{ to: "/cart", icon: ShoppingCart, label: t.nav.cart, badge: cartCount },
 		{ to: "/profile", icon: User, label: t.nav.profile },
 	];
