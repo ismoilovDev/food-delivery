@@ -7,23 +7,33 @@ export interface ReverseGeocodeReqDto {
 	longitude: number;
 }
 
-export interface AddressDto {
-	address: string;
-	latitude: number;
-	longitude: number;
+// Matches API: AddressDTO
+export interface AddressDTO {
+	fullAddress?: string;
+	street?: string;
+	house?: string;
 	city?: string;
-	country?: string;
+	district?: string;
+	postalCode?: string;
+	latitude?: number;
+	longitude?: number;
+	formattedAddress?: string;
+}
+
+// Matches API: CoordinatesDTO
+export interface CoordinatesDTO {
+	latitude?: number;
+	longitude?: number;
 }
 
 export interface DeliveryZoneCheckReqDto {
 	latitude: number;
 	longitude: number;
-	restaurantId: number;
 }
 
 export interface DistanceReqDto {
-	fromLatitude: number;
-	fromLongitude: number;
-	toLatitude: number;
-	toLongitude: number;
+	lat1: number;
+	lon1: number;
+	lat2: number;
+	lon2: number;
 }

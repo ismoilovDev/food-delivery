@@ -24,12 +24,14 @@ export async function removeCartItem(itemId: number) {
 }
 
 export async function applyPromocode(body: ApplyPromocodeReqDto) {
-	const res = await api.post<ApiResponse<CartDto>>("/api/cart/promocode/apply", body);
+	const res = await api.post<ApiResponse<CartDto>>("/api/cart/promocode/apply", null, {
+		params: { code: body.code },
+	});
 	return res.data;
 }
 
 export async function removePromocode() {
-	const res = await api.delete<ApiResponse<CartDto>>("/api/cart/promocode");
+	const res = await api.delete<ApiResponse<CartDto>>("/api/cart/promocode/remove");
 	return res.data;
 }
 

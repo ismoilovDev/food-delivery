@@ -11,7 +11,6 @@ export const ru = {
 	// Bottom Nav
 	nav: {
 		menu: "Меню",
-		branches: "Филиалы",
 		cart: "Корзина",
 		profile: "Профиль",
 	},
@@ -60,11 +59,17 @@ export const ru = {
 		address: "Адрес",
 		selectAddress: "Выберите адрес",
 		addAddress: "Добавить новый адрес",
+		addressSection: "Адрес доставки",
+		pickLocation: "Выберите адрес",
+		useCurrentLocation: "Использовать текущее местоположение",
+		confirmAddress: "Сохранить",
+		loadingAddress: "Определяем адрес...",
 		paymentMethod: "Способ оплаты",
 		cash: "Наличные",
 		card: "Карта",
 		notes: "Примечание",
 		notesPlaceholder: "Примечание к заказу...",
+		promoError: "Промо код недействителен или не может быть применён",
 		placeOrder: "Оформить заказ",
 		orderSuccess: "Заказ успешно принят!",
 		orderError: "Ошибка при оформлении заказа",
@@ -72,23 +77,6 @@ export const ru = {
 		freeDeliveryFrom: "Бесплатная доставка от",
 	},
 
-	// Branches
-	branches: {
-		title: "Филиалы",
-		select: "Выберите филиал",
-		selected: "Выбран",
-		distance: "км",
-		workingHours: "Рабочие часы",
-		open: "Открыто",
-		closed: "Закрыто",
-		minOrder: "Минимальный заказ",
-		deliveryFee: "Доставка",
-		avgDeliveryTime: "Среднее время доставки",
-		min: "мин",
-		selectBranch: "Выбрать этот филиал",
-		empty: "Филиалы не найдены",
-		required: "Выберите филиал для продолжения",
-	},
 
 	// Profile
 	profile: {

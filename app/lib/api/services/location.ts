@@ -1,35 +1,30 @@
 import { api } from "~/lib/axios";
 import type {
-	AddressDto,
+	AddressDTO,
 	ApiResponse,
+	CoordinatesDTO,
 	DeliveryZoneCheckReqDto,
 	DistanceReqDto,
 	GeocodeReqDto,
 	ReverseGeocodeReqDto,
 } from "../types";
 
-export async function geocode(body: GeocodeReqDto) {
-	const res = await api.post<ApiResponse<AddressDto>>("/api/location/geocode", body);
+export async function geocode(params: GeocodeReqDto) {
+	const res = await api.get<ApiResponse<CoordinatesDTO>>("/api/location/geocode", { params });
 	return res.data;
 }
 
-export async function reverseGeocode(body: ReverseGeocodeReqDto) {
-	const res = await api.post<ApiResponse<AddressDto>>("/api/location/reverse-geocode", body);
+export async function reverseGeocode(params: ReverseGeocodeReqDto) {
+	const res = await api.get<ApiResponse<AddressDTO>>("/api/location/reverse-geocode", { params });
 	return res.data;
 }
 
-export async function checkDeliveryZone(body: DeliveryZoneCheckReqDto) {
-	const res = await api.post<ApiResponse<{ isInZone: boolean; deliveryFee?: number }>>(
-		"/api/location/check-delivery-zone",
-		body
-	);
+export async function checkDeliveryZone(params: DeliveryZoneCheckReqDto) {
+	const res = await api.get<ApiResponse<boolean>>("/api/location/check-delivery-zone", { params });
 	return res.data;
 }
 
-export async function calculateDistance(body: DistanceReqDto) {
-	const res = await api.post<ApiResponse<{ distanceKm: number; estimatedMinutes: number }>>(
-		"/api/location/distance",
-		body
-	);
+export async function calculateDistance(params: DistanceReqDto) {
+	const res = await api.get<ApiResponse<number>>("/api/location/calculate-distance", { params });
 	return res.data;
 }

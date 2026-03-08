@@ -11,7 +11,6 @@ export const uz = {
 	// Bottom Nav
 	nav: {
 		menu: "Menyu",
-		branches: "Filiallar",
 		cart: "Savatcha",
 		profile: "Profil",
 	},
@@ -60,11 +59,17 @@ export const uz = {
 		address: "Manzil",
 		selectAddress: "Manzilni tanlang",
 		addAddress: "Yangi manzil qo'shish",
+		addressSection: "Yetkazib berish manzili",
+		pickLocation: "Manzilni tanlang",
+		useCurrentLocation: "Joriy joylashuvdan foydalanish",
+		confirmAddress: "Saqlash",
+		loadingAddress: "Manzil aniqlanmoqda...",
 		paymentMethod: "To'lov usuli",
 		cash: "Naqd pul",
 		card: "Karta",
 		notes: "Izoh",
 		notesPlaceholder: "Buyurtma uchun izoh...",
+		promoError: "Promo kod yaroqsiz yoki qo'llab bo'lmadi",
 		placeOrder: "Buyurtma berish",
 		orderSuccess: "Buyurtma muvaffaqiyatli qabul qilindi!",
 		orderError: "Buyurtma berishda xato yuz berdi",
@@ -72,23 +77,6 @@ export const uz = {
 		freeDeliveryFrom: "dan bepul yetkazib berish",
 	},
 
-	// Branches
-	branches: {
-		title: "Filiallar",
-		select: "Filialni tanlang",
-		selected: "Tanlangan",
-		distance: "km",
-		workingHours: "Ish vaqti",
-		open: "Ochiq",
-		closed: "Yopiq",
-		minOrder: "Minimal buyurtma",
-		deliveryFee: "Yetkazib berish",
-		avgDeliveryTime: "O'rtacha yetkazib berish vaqti",
-		min: "daqiqa",
-		selectBranch: "Shu filialni tanlash",
-		empty: "Filiallar topilmadi",
-		required: "Davom etish uchun filialni tanlang",
-	},
 
 	// Profile
 	profile: {
