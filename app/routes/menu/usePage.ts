@@ -7,7 +7,7 @@ import {
 } from "~/lib/api/hooks/useCart";
 import { useRootCategories } from "~/lib/api/hooks/useCategories";
 import { useProductSearch, useProducts } from "~/lib/api/hooks/useProducts";
-import { useBranchStore } from "~/store/branchStore";
+import { RESTAURANT_ID } from "~/lib/config";
 import { useI18nStore } from "~/store/i18nStore";
 
 export function useMenuPage() {
@@ -15,17 +15,16 @@ export function useMenuPage() {
 	const [searchQuery, setSearchQuery] = useState("");
 
 	const { t, lang } = useI18nStore();
-	const selectedBranch = useBranchStore((s) => s.selectedBranch);
 
 	const { data: categories, isLoading: categoriesLoading } = useRootCategories();
 
 	const { data: products, isLoading: productsLoading } = useProducts({
 		categoryId: selectedCategoryId ?? undefined,
-		restaurantId: selectedBranch?.id,
+		restaurantId: RESTAURANT_ID,
 	});
 
 	const { data: searchResults, isLoading: searchLoading } = useProductSearch(searchQuery, {
-		restaurantId: selectedBranch?.id,
+		restaurantId: RESTAURANT_ID,
 	});
 
 	const { data: cart } = useCart();
@@ -83,7 +82,6 @@ export function useMenuPage() {
 		setSearchQuery,
 		cartItemMap,
 		cartTotalItems,
-		selectedBranch,
 		handleIncrement,
 		handleDecrement,
 	};

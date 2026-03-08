@@ -102,7 +102,7 @@ export function useCartPage() {
 			{
 				onSuccess: () => setPromoInput(""),
 				onError: () => setPromoError(t.cart.promoError),
-			},
+			}
 		);
 	}
 

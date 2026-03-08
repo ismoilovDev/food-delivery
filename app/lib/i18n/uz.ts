@@ -77,7 +77,6 @@ export const uz = {
 		freeDeliveryFrom: "dan bepul yetkazib berish",
 	},
 
-
 	// Profile
 	profile: {
 		title: "Profil",

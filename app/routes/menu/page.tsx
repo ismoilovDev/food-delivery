@@ -16,7 +16,6 @@ export default function MenuPage() {
 		searchQuery,
 		setSearchQuery,
 		cartItemMap,
-		selectedBranch,
 		handleIncrement,
 		handleDecrement,
 	} = useMenuPage();
@@ -26,10 +25,7 @@ export default function MenuPage() {
 			<MenuHeader
 				searchQuery={searchQuery}
 				onSearchChange={setSearchQuery}
-				selectedBranch={selectedBranch}
-				lang={lang}
 				placeholder={t.menu.search}
-				branchPlaceholder={t.branches.select}
 			/>
 
 			<CategoryTabs

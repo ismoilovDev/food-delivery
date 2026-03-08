@@ -3,10 +3,10 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { formatPrice } from "~/lib/format";
 import { AddressPickerModal } from "./components/address-picker-modal";
 import { AddressSection } from "./components/address-section";
-import { PromoSection } from "./components/promo-section";
 import { CartItem } from "./components/cart-item";
 import { CartSummary } from "./components/cart-summary";
 import { EmptyCart } from "./components/empty-cart";
+import { PromoSection } from "./components/promo-section";
 import { useCartPage } from "./usePage";
 
 export default function CartPage() {

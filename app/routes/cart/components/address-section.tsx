@@ -1,6 +1,6 @@
 import { Check, MapPin, Plus } from "lucide-react";
-import { cn } from "~/lib/utils";
 import type { DeliveryAddressDto } from "~/lib/api/types";
+import { cn } from "~/lib/utils";
 
 interface AddressSectionProps {
 	addresses: DeliveryAddressDto[];

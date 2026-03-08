@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import { telegramAuth } from "~/lib/api/services/auth";
 import { getMe } from "~/lib/api/services/users";
 import { useAuthStore } from "~/store/authStore";
-import { useBranchStore } from "~/store/branchStore";
 import { useI18nStore } from "~/store/i18nStore";
 
 export type AuthStatus = "loading" | "error" | "no-telegram";
@@ -15,13 +14,12 @@ export function useAuthPage() {
 	const navigate = useNavigate();
 
 	const { setTokens, setUser, isAuthenticated } = useAuthStore();
-	const selectedBranch = useBranchStore((s) => s.selectedBranch);
 	const { t } = useI18nStore();
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: intentional mount-only effect
 	useEffect(() => {
-		if (isAuthenticated) {
-			navigate(selectedBranch ? "/menu" : "/branches", { replace: true });
+		if (isAuthenticated && !import.meta.env.DEV) {
+			navigate("/menu", { replace: true });
 			return;
 		}
 		doAuth();
@@ -36,7 +34,7 @@ export function useAuthPage() {
 					const meRes = await getMe();
 					if (meRes.success && meRes.data) setUser(meRes.data);
 				} catch {}
-				navigate(selectedBranch ? "/menu" : "/branches", { replace: true });
+				navigate("/menu", { replace: true });
 				return;
 			}
 
@@ -66,7 +64,7 @@ export function useAuthPage() {
 				// user info is not critical
 			}
 
-			navigate(selectedBranch ? "/menu" : "/branches", { replace: true });
+			navigate("/menu", { replace: true });
 		} catch (err) {
 			if (isLaunchParamsRetrieveError(err)) {
 				setStatus("no-telegram");

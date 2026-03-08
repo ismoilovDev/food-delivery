@@ -162,7 +162,7 @@ export function AddressPickerModal({
 				setIsLocating(false);
 			},
 			() => setIsLocating(false),
-			{ enableHighAccuracy: true, timeout: 10000 },
+			{ enableHighAccuracy: true, timeout: 10000 }
 		);
 	}
 

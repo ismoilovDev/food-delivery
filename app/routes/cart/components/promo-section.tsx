@@ -32,9 +32,7 @@ export function PromoSection({
 		<div className="bg-white rounded-2xl shadow-sm overflow-hidden px-4 py-3.5">
 			<div className="flex items-center gap-2 mb-3">
 				<Tag size={14} className="text-orange-500" />
-				<h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
-					{t.promo}
-				</h2>
+				<h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t.promo}</h2>
 			</div>
 
 			{appliedPromo ? (

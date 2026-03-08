@@ -77,7 +77,6 @@ export const ru = {
 		freeDeliveryFrom: "Бесплатная доставка от",
 	},
 
-
 	// Profile
 	profile: {
 		title: "Профиль",
