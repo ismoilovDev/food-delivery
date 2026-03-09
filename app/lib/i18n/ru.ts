@@ -12,6 +12,7 @@ export const ru = {
 	nav: {
 		menu: "Меню",
 		cart: "Корзина",
+		orders: "Заказы",
 		profile: "Профиль",
 	},
 
@@ -83,6 +84,7 @@ export const ru = {
 		orders: "Мои заказы",
 		info: "Личные данные",
 		addresses: "Мои адреса",
+		notifications: "Уведомления",
 		language: "Язык",
 		logout: "Выйти",
 		logoutConfirm: "Вы уверены, что хотите выйти?",
@@ -92,10 +94,16 @@ export const ru = {
 
 	// Orders
 	orders: {
-		title: "Мои заказы",
+		title: "Заказы",
 		empty: "Нет заказов",
 		emptyDesc: "Вы ещё не делали заказов",
 		orderNumber: "Номер заказа",
+		filter: {
+			all: "Все",
+			active: "Активные",
+			delivered: "Доставлено",
+			cancelled: "Отменены",
+		},
 		status: {
 			PENDING: "Ожидание",
 			CONFIRMED: "Подтверждён",
@@ -108,13 +116,28 @@ export const ru = {
 			CANCELLED: "Отменён",
 			REJECTED: "Отклонён",
 		},
+		timeline: {
+			ordered: "Заказ принят",
+			confirmed: "Подтверждён",
+			preparing: "Готовится",
+			onTheWay: "В пути",
+			delivered: "Доставлен",
+			cancelled: "Отменён",
+		},
 		total: "Итого",
 		items: "товара(ов)",
 		cancel: "Отменить",
 		cancelConfirm: "Отменить заказ?",
+		cancelConfirmDesc: "Это действие нельзя отменить.",
 		rate: "Оценить",
 		rateOrder: "Оцените заказ",
+		reviewPlaceholder: "Оставьте отзыв (необязательно)...",
 		createdAt: "Время заказа",
+		estimatedDelivery: "Примерное время",
+		addressSection: "Адрес доставки",
+		noAddress: "Адрес не указан",
+		summarySection: "Итого",
+		items_section: "Состав заказа",
 	},
 
 	// Profile Info
@@ -132,11 +155,13 @@ export const ru = {
 	addresses: {
 		title: "Мои адреса",
 		empty: "Нет адресов",
+		emptyDesc: "Вы ещё не добавили адреса",
 		addNew: "Добавить новый адрес",
 		default: "Основной",
 		setDefault: "Сделать основным",
 		delete: "Удалить",
 		deleteConfirm: "Удалить адрес?",
+		deleteConfirmDesc: "Этот адрес будет удалён.",
 		address: "Адрес",
 		label: "Метка",
 		labelPlaceholder: "Дом, Работа...",
@@ -145,7 +170,17 @@ export const ru = {
 		save: "Сохранить",
 		latitude: "Широта",
 		longitude: "Долгота",
-		locationHint: "Введите адрес и координаты",
+		locationHint: "Выберите адрес на карте",
+	},
+
+	// Notifications
+	notifications: {
+		title: "Уведомления",
+		empty: "Нет уведомлений",
+		emptyDesc: "Уведомлений пока нет",
+		markAllRead: "Отметить все как прочитанные",
+		unread: "Непрочитанное",
+		orderUpdate: "Статус заказа изменён",
 	},
 
 	// Language
@@ -154,6 +189,7 @@ export const ru = {
 		uz: "O'zbek",
 		ru: "Русский",
 		select: "Выберите язык",
+		save: "Сохранить",
 	},
 
 	// Common
@@ -170,5 +206,7 @@ export const ru = {
 		close: "Закрыть",
 		sum: "сум",
 		currency: "сум",
+		yes: "Да",
+		no: "Нет",
 	},
 };

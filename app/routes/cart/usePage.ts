@@ -10,7 +10,6 @@ import {
 	useUpdateCartItem,
 } from "~/lib/api/hooks/useCart";
 import { useCreateOrder } from "~/lib/api/hooks/useOrders";
-import { RESTAURANT_ID } from "~/lib/config";
 import { useAuthStore } from "~/store/authStore";
 import { useI18nStore } from "~/store/i18nStore";
 
@@ -43,7 +42,10 @@ export function useCartPage() {
 
 	// Sync selectedAddressId with default when addresses load
 	const resolvedSelectedId =
-		selectedAddressId ?? addresses.find((a) => a.isDefault)?.id ?? addresses[0]?.id;
+		selectedAddressId ??
+		addresses.find((a) => a.isDefault)?.id ??
+		addresses[0]?.id ??
+		(import.meta.env.DEV ? 1 : undefined);
 
 	function handleIncrement(itemId: number, currentQty: number) {
 		updateItem.mutate({ itemId, quantity: currentQty + 1 });
@@ -76,12 +78,12 @@ export function useCartPage() {
 	function handleSaveAddress(lat: number, lng: number, address: string) {
 		createAddress.mutate(
 			{
-				address,
+				fullAddress: address,
 				latitude: lat,
 				longitude: lng,
-				recipientName: user?.fullName ?? "",
-				phoneNumber: user?.phone ?? "",
-				isDefault: false,
+				contactName: user?.fullName ?? "",
+				contactPhone: user?.phone ?? "",
+				isDefault: addresses.length === 0,
 			},
 			{
 				onSuccess: (res) => {
@@ -116,14 +118,12 @@ export function useCartPage() {
 
 		createOrder.mutate(
 			{
-				restaurantId: RESTAURANT_ID,
 				deliveryAddressId: resolvedSelectedId,
 				items: cart.items.map((item) => ({
 					productId: item.productId,
 					quantity: item.quantity,
 				})),
-				paymentMethod: "CASH",
-				specialInstructions: note || undefined,
+				deliveryNotes: note || undefined,
 				promocodeCode: cart.promocodeCode || undefined,
 			},
 			{

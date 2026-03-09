@@ -22,19 +22,20 @@ export default function MenuPage() {
 
 	return (
 		<div className="flex flex-col min-h-screen bg-gray-50">
-			<MenuHeader
-				searchQuery={searchQuery}
-				onSearchChange={setSearchQuery}
-				placeholder={t.menu.search}
-			/>
-
-			<CategoryTabs
-				categories={categories}
-				isLoading={categoriesLoading}
-				selectedId={selectedCategoryId}
-				allLabel={t.menu.all}
-				onSelect={setSelectedCategoryId}
-			/>
+			<div className="sticky top-0 z-40 shadow-lg shadow-orange-200/50">
+				<MenuHeader
+					searchQuery={searchQuery}
+					onSearchChange={setSearchQuery}
+					placeholder={t.menu.search}
+				/>
+				<CategoryTabs
+					categories={categories}
+					isLoading={categoriesLoading}
+					selectedId={selectedCategoryId}
+					allLabel={t.menu.all}
+					onSelect={setSelectedCategoryId}
+				/>
+			</div>
 
 			<div className="flex-1 p-4">
 				<ProductGrid

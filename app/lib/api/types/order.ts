@@ -17,11 +17,9 @@ export interface OrderItemReqDto {
 }
 
 export interface OrderReqDto {
-	restaurantId: number;
 	deliveryAddressId: number;
 	items: OrderItemReqDto[];
-	paymentMethod?: string;
-	specialInstructions?: string;
+	deliveryNotes?: string;
 	promocodeCode?: string;
 }
 
@@ -54,6 +52,18 @@ export interface OrderDto {
 	createdAt: string;
 	updatedAt: string;
 	estimatedDeliveryTime?: string;
+}
+
+export interface OrderResMiniDto {
+	id: number;
+	orderNumber: string;
+	status: OrderStatus;
+	totalAmount: number;
+	itemsCount: number;
+	restaurantName: string;
+	estimatedDeliveryTime?: string;
+	createdAt: string;
+	isPaid?: boolean;
 }
 
 export interface RateOrderReqDto {

@@ -12,6 +12,7 @@ export const uz = {
 	nav: {
 		menu: "Menyu",
 		cart: "Savatcha",
+		orders: "Buyurtmalar",
 		profile: "Profil",
 	},
 
@@ -83,6 +84,7 @@ export const uz = {
 		orders: "Buyurtmalarim",
 		info: "Shaxsiy ma'lumotlar",
 		addresses: "Manzillarim",
+		notifications: "Bildirishnomalar",
 		language: "Til",
 		logout: "Chiqish",
 		logoutConfirm: "Chiqishni istaysizmi?",
@@ -92,29 +94,50 @@ export const uz = {
 
 	// Orders
 	orders: {
-		title: "Buyurtmalarim",
+		title: "Buyurtmalar",
 		empty: "Buyurtmalar yo'q",
 		emptyDesc: "Hali buyurtma bermagansiz",
 		orderNumber: "Buyurtma raqami",
+		filter: {
+			all: "Barchasi",
+			active: "Aktiv",
+			delivered: "Yetkazildi",
+			cancelled: "Bekor",
+		},
 		status: {
 			PENDING: "Kutilmoqda",
 			CONFIRMED: "Tasdiqlandi",
 			PREPARING: "Tayyorlanmoqda",
-			READY_FOR_DELIVERY: "Yetkazib berishga tayyor",
+			READY_FOR_DELIVERY: "Yetkazishga tayyor",
 			ASSIGNED_TO_COURIER: "Kuryerga tayinlandi",
 			PICKED_UP: "Olib ketildi",
-			IN_DELIVERY: "Yetkazib berilmoqda",
-			DELIVERED: "Yetkazib berildi",
+			IN_DELIVERY: "Yetkazilmoqda",
+			DELIVERED: "Yetkazildi",
 			CANCELLED: "Bekor qilindi",
 			REJECTED: "Rad etildi",
 		},
+		timeline: {
+			ordered: "Buyurtma qabul qilindi",
+			confirmed: "Tasdiqlandi",
+			preparing: "Tayyorlanmoqda",
+			onTheWay: "Yo'lda",
+			delivered: "Yetkazildi",
+			cancelled: "Bekor qilindi",
+		},
 		total: "Jami",
-		items: "mahsulot",
+		items: "ta mahsulot",
 		cancel: "Bekor qilish",
 		cancelConfirm: "Buyurtmani bekor qilishni istaysizmi?",
+		cancelConfirmDesc: "Bu amaliyotni ortga qaytarib bo'lmaydi.",
 		rate: "Baholash",
 		rateOrder: "Buyurtmani baholang",
+		reviewPlaceholder: "Izoh qoldiring (ixtiyoriy)...",
 		createdAt: "Buyurtma vaqti",
+		estimatedDelivery: "Taxminiy vaqt",
+		addressSection: "Yetkazib berish manzili",
+		noAddress: "Manzil ko'rsatilmagan",
+		summarySection: "Hisob-kitob",
+		items_section: "Buyurtma tarkibi",
 	},
 
 	// Profile Info
@@ -132,11 +155,13 @@ export const uz = {
 	addresses: {
 		title: "Manzillarim",
 		empty: "Manzillar yo'q",
+		emptyDesc: "Hali manzil qo'shmagansiz",
 		addNew: "Yangi manzil qo'shish",
 		default: "Asosiy",
 		setDefault: "Asosiy qilish",
 		delete: "O'chirish",
 		deleteConfirm: "Manzilni o'chirishni istaysizmi?",
+		deleteConfirmDesc: "Bu manzil o'chirilib ketadi.",
 		address: "Manzil",
 		label: "Yorliq",
 		labelPlaceholder: "Uy, Ish...",
@@ -145,7 +170,17 @@ export const uz = {
 		save: "Saqlash",
 		latitude: "Kenglik",
 		longitude: "Uzunlik",
-		locationHint: "Manzil va koordinatalarni kiriting",
+		locationHint: "Xaritadan manzilni tanlang",
+	},
+
+	// Notifications
+	notifications: {
+		title: "Bildirishnomalar",
+		empty: "Bildirishnomalar yo'q",
+		emptyDesc: "Hali hech qanday bildirishnoma kelmadi",
+		markAllRead: "Hammasini o'qildi deb belgilash",
+		unread: "O'qilmagan",
+		orderUpdate: "Buyurtma yangilandi",
 	},
 
 	// Language
@@ -154,6 +189,7 @@ export const uz = {
 		uz: "O'zbek",
 		ru: "Русский",
 		select: "Tilni tanlang",
+		save: "Saqlash",
 	},
 
 	// Common
@@ -170,6 +206,8 @@ export const uz = {
 		close: "Yopish",
 		sum: "so'm",
 		currency: "so'm",
+		yes: "Ha",
+		no: "Yo'q",
 	},
 };
 

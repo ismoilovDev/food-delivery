@@ -1,23 +1,32 @@
-export interface DeliveryAddressDto {
+// GET /api/addresses/my-addresses returns this
+export interface DeliveryAddressResMiniDto {
 	id: number;
-	userId: number;
-	address: string;
 	label?: string;
-	latitude: number;
-	longitude: number;
-	phoneNumber: string;
-	recipientName: string;
-	isDefault: boolean;
-	createdAt: string;
-	updatedAt: string;
+	fullAddress?: string;
+	street?: string;
+	building?: string;
+	apartment?: string;
+	latitude?: number;
+	longitude?: number;
+	isDefault?: boolean;
+	contactName?: string;
+	contactPhone?: string;
 }
 
+// POST/PUT /api/addresses/my-addresses body
 export interface DeliveryAddressReqDto {
-	address: string;
+	fullAddress: string;
 	label?: string;
-	latitude: number;
-	longitude: number;
-	phoneNumber: string;
-	recipientName: string;
+	street?: string;
+	building?: string;
+	entrance?: string;
+	floor?: string;
+	apartment?: string;
+	intercom?: string;
+	latitude?: number;
+	longitude?: number;
+	deliveryNotes?: string;
 	isDefault?: boolean;
+	contactName?: string;
+	contactPhone?: string;
 }

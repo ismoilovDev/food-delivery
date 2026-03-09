@@ -174,7 +174,7 @@ export function AddressPickerModal({
 	if (!isOpen) return null;
 
 	return (
-		<div className="fixed inset-0 z-50 flex flex-col bg-white">
+		<div className="fixed inset-0 z-[60] flex flex-col bg-white">
 			{/* Header */}
 			<div className="flex items-center justify-between px-4 pt-12 pb-3 border-b border-gray-100 shrink-0">
 				<h2 className="text-lg font-bold text-gray-900">{t.pickLocation}</h2>

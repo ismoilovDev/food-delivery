@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cancelOrder, createOrder, getMyOrders, getOrderById, rateOrder } from "../services/orders";
-import type { MyOrdersParams, OrderReqDto, RateOrderReqDto } from "../types";
+import type { MyOrdersParams, OrderReqDto } from "../types";
 
 export const orderKeys = {
 	all: ["orders"] as const,
@@ -21,6 +21,7 @@ export function useOrder(id: number) {
 		queryKey: orderKeys.detail(id),
 		queryFn: () => getOrderById(id),
 		select: (res) => res.data,
+		enabled: !!id,
 	});
 }
 
@@ -35,7 +36,7 @@ export function useCreateOrder() {
 export function useCancelOrder() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (id: number) => cancelOrder(id),
+		mutationFn: ({ id, reason }: { id: number; reason?: string }) => cancelOrder(id, reason),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: orderKeys.all }),
 	});
 }
@@ -43,7 +44,8 @@ export function useCancelOrder() {
 export function useRateOrder() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: ({ id, body }: { id: number; body: RateOrderReqDto }) => rateOrder(id, body),
+		mutationFn: ({ id, rating, review }: { id: number; rating: number; review?: string }) =>
+			rateOrder(id, rating, review),
 		onSuccess: (_data, { id }) => queryClient.invalidateQueries({ queryKey: orderKeys.detail(id) }),
 	});
 }

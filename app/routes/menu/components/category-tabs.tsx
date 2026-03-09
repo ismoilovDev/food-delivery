@@ -18,7 +18,7 @@ export function CategoryTabs({
 	onSelect,
 }: CategoryTabsProps) {
 	return (
-		<div className="sticky top-[92px] z-30 bg-white border-b border-gray-100 shadow-sm">
+		<div className="bg-white border-b border-gray-100 shadow-sm">
 			<div className="flex gap-2 overflow-x-auto px-4 py-3 no-scrollbar">
 				<CategoryPill
 					label={allLabel}

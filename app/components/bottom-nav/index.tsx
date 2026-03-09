@@ -1,4 +1,4 @@
-import { Home, ShoppingCart, User } from "lucide-react";
+import { Home, Package, ShoppingCart, User } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { useCart } from "~/lib/api/hooks/useCart";
 import { useI18nStore } from "~/store/i18nStore";
@@ -12,20 +12,21 @@ export function BottomNav() {
 
 	const tabs = [
 		{ to: "/menu", icon: Home, label: t.nav.menu },
+		{ to: "/orders", icon: Package, label: t.nav.orders },
 		{ to: "/cart", icon: ShoppingCart, label: t.nav.cart, badge: cartCount },
 		{ to: "/profile", icon: User, label: t.nav.profile },
 	];
 
 	return (
 		<nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 z-50">
-			<div className="flex items-center justify-around py-2 px-2 safe-bottom">
+			<div className="flex items-center justify-around py-2 px-1 safe-bottom">
 				{tabs.map(({ to, icon: Icon, label, badge }) => {
 					const active = pathname === to || pathname.startsWith(`${to}/`);
 					return (
 						<Link
 							key={to}
 							to={to}
-							className="flex flex-col items-center gap-0.5 py-1 px-4 rounded-2xl transition-all"
+							className="flex flex-col items-center gap-0.5 py-1 px-3 rounded-2xl transition-all"
 						>
 							<div className="relative">
 								<Icon
