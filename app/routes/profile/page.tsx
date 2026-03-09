@@ -133,7 +133,7 @@ export default function ProfilePage() {
 
 			{/* Language bottom sheet */}
 			{showLangSheet && (
-				<div className="fixed inset-0 z-50 flex items-end">
+				<div className="fixed inset-0 z-[60] flex items-end">
 					<button
 						type="button"
 						aria-label="close"
@@ -185,7 +185,7 @@ export default function ProfilePage() {
 
 			{/* Logout confirm bottom sheet */}
 			{showLogoutConfirm && (
-				<div className="fixed inset-0 z-50 flex items-end">
+				<div className="fixed inset-0 z-[60] flex items-end">
 					<button
 						type="button"
 						aria-label="close"
