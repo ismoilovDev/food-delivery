@@ -1,5 +1,6 @@
-import { Bell, ChevronRight, Globe, LogOut, MapPin, User } from "lucide-react";
+import { Bell, ChevronRight, Globe, LogOut, MapPin, Package, User } from "lucide-react";
 import { Link } from "react-router";
+import { BottomSheet } from "~/components/bottom-sheet";
 import type { Lang } from "~/lib/i18n";
 import { useProfilePage } from "./usePage";
 
@@ -24,18 +25,9 @@ export default function ProfilePage() {
 		: "?";
 
 	const menuItems = [
-		{
-			icon: User,
-			label: t.profile.info,
-			to: "/profile/info",
-			badge: null,
-		},
-		{
-			icon: MapPin,
-			label: t.profile.addresses,
-			to: "/profile/addresses",
-			badge: null,
-		},
+		{ icon: User, label: t.profile.info, to: "/profile/info", badge: null },
+		{ icon: Package, label: t.nav.orders, to: "/orders", badge: null },
+		{ icon: MapPin, label: t.profile.addresses, to: "/profile/addresses", badge: null },
 		{
 			icon: Bell,
 			label: t.profile.notifications,
@@ -49,7 +41,6 @@ export default function ProfilePage() {
 			{/* Header */}
 			<div className="bg-gradient-to-br from-orange-500 to-red-500 px-4 pt-12 pb-8">
 				<div className="flex items-center gap-4">
-					{/* Avatar */}
 					<div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
 						{user?.photoUrl ? (
 							<img
@@ -61,7 +52,6 @@ export default function ProfilePage() {
 							<span className="text-xl font-bold text-white">{initials}</span>
 						)}
 					</div>
-					{/* Info */}
 					<div className="flex-1 min-w-0">
 						<p className="text-lg font-bold text-white truncate">{user?.fullName ?? "..."}</p>
 						<p className="text-orange-100 text-sm mt-0.5">{user?.phone ?? ""}</p>
@@ -132,89 +122,65 @@ export default function ProfilePage() {
 			</div>
 
 			{/* Language bottom sheet */}
-			{showLangSheet && (
-				<div className="fixed inset-0 z-[60] flex items-end">
-					<button
-						type="button"
-						aria-label="close"
-						className="absolute inset-0 bg-black/40"
-						onClick={() => setShowLangSheet(false)}
-					/>
-					<div className="relative w-full bg-white rounded-t-3xl px-4 pt-4 pb-8 z-10">
-						<div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-5" />
-						<h2 className="text-lg font-bold text-gray-900 mb-4">{t.language.select}</h2>
-
-						<div className="flex flex-col gap-2 mb-5">
-							{(["uz", "ru"] as Lang[]).map((l) => (
-								<button
-									key={l}
-									type="button"
-									onClick={() => setPendingLang(l)}
-									className={`flex items-center justify-between px-4 py-4 rounded-2xl border-2 transition-all ${
-										pendingLang === l
-											? "border-orange-400 bg-orange-50"
-											: "border-gray-100 bg-white"
-									}`}
-								>
-									<span
-										className={`text-base font-semibold ${
-											pendingLang === l ? "text-orange-600" : "text-gray-700"
-										}`}
-									>
-										{l === "uz" ? t.language.uz : t.language.ru}
-									</span>
-									{pendingLang === l && (
-										<div className="w-5 h-5 rounded-full bg-orange-500 flex items-center justify-center">
-											<div className="w-2 h-2 rounded-full bg-white" />
-										</div>
-									)}
-								</button>
-							))}
-						</div>
-
+			<BottomSheet isOpen={showLangSheet} onClose={() => setShowLangSheet(false)}>
+				<h2 className="text-lg font-bold text-gray-900 mb-4">{t.language.select}</h2>
+				<div className="flex flex-col gap-2 mb-5">
+					{(["uz", "ru"] as Lang[]).map((l) => (
 						<button
+							key={l}
 							type="button"
-							onClick={handleSaveLang}
-							className="w-full py-4 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold text-base shadow-lg shadow-orange-200 active:scale-[0.98] transition-transform"
+							onClick={() => setPendingLang(l)}
+							className={`flex items-center justify-between px-4 py-4 rounded-2xl border-2 transition-all ${
+								pendingLang === l
+									? "border-orange-400 bg-orange-50"
+									: "border-gray-100 bg-white"
+							}`}
 						>
-							{t.language.save}
+							<span
+								className={`text-base font-semibold ${
+									pendingLang === l ? "text-orange-600" : "text-gray-700"
+								}`}
+							>
+								{l === "uz" ? t.language.uz : t.language.ru}
+							</span>
+							{pendingLang === l && (
+								<div className="w-5 h-5 rounded-full bg-orange-500 flex items-center justify-center">
+									<div className="w-2 h-2 rounded-full bg-white" />
+								</div>
+							)}
 						</button>
-					</div>
+					))}
 				</div>
-			)}
+				<button
+					type="button"
+					onClick={handleSaveLang}
+					className="w-full py-4 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold text-base shadow-lg shadow-orange-200 active:scale-[0.98] transition-transform"
+				>
+					{t.language.save}
+				</button>
+			</BottomSheet>
 
 			{/* Logout confirm bottom sheet */}
-			{showLogoutConfirm && (
-				<div className="fixed inset-0 z-[60] flex items-end">
+			<BottomSheet isOpen={showLogoutConfirm} onClose={() => setShowLogoutConfirm(false)}>
+				<h2 className="text-lg font-bold text-gray-900 mb-1">{t.profile.logout}</h2>
+				<p className="text-sm text-gray-400 mb-6">{t.profile.logoutConfirm}</p>
+				<div className="flex gap-3">
 					<button
 						type="button"
-						aria-label="close"
-						className="absolute inset-0 bg-black/40"
 						onClick={() => setShowLogoutConfirm(false)}
-					/>
-					<div className="relative w-full bg-white rounded-t-3xl px-4 pt-4 pb-8 z-10">
-						<div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-5" />
-						<h2 className="text-lg font-bold text-gray-900 mb-1">{t.profile.logout}</h2>
-						<p className="text-sm text-gray-400 mb-6">{t.profile.logoutConfirm}</p>
-						<div className="flex gap-3">
-							<button
-								type="button"
-								onClick={() => setShowLogoutConfirm(false)}
-								className="flex-1 py-3.5 rounded-2xl border border-gray-200 text-gray-700 font-semibold text-sm"
-							>
-								{t.profile.no}
-							</button>
-							<button
-								type="button"
-								onClick={handleLogout}
-								className="flex-1 py-3.5 rounded-2xl bg-red-500 text-white font-semibold text-sm active:scale-[0.98] transition-transform"
-							>
-								{t.profile.yes}
-							</button>
-						</div>
-					</div>
+						className="flex-1 py-3.5 rounded-2xl border border-gray-200 text-gray-700 font-semibold text-sm"
+					>
+						{t.profile.no}
+					</button>
+					<button
+						type="button"
+						onClick={handleLogout}
+						className="flex-1 py-3.5 rounded-2xl bg-red-500 text-white font-semibold text-sm active:scale-[0.98] transition-transform"
+					>
+						{t.profile.yes}
+					</button>
 				</div>
-			)}
+			</BottomSheet>
 		</div>
 	);
 }

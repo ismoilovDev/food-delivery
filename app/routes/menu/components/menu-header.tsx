@@ -9,7 +9,7 @@ interface MenuHeaderProps {
 
 export function MenuHeader({ searchQuery, onSearchChange, placeholder }: MenuHeaderProps) {
 	return (
-		<div className="sticky top-0 z-40 bg-gradient-to-br from-orange-500 to-red-500 px-4 pt-4 pb-3 shadow-lg shadow-orange-200/50">
+		<div className="bg-gradient-to-br from-orange-500 to-red-500 px-4 pt-4 pb-3">
 			<div className="relative">
 				<Search
 					size={16}

@@ -1,5 +1,6 @@
 import { ChevronLeft, Loader2, MapPin, Plus, Star, Trash2 } from "lucide-react";
 import { Link } from "react-router";
+import { BottomSheet } from "~/components/bottom-sheet";
 import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { AddressPickerModal } from "~/routes/cart/components/address-picker-modal";
@@ -72,14 +73,14 @@ export default function ProfileAddressesPage() {
 							key={address.id}
 							className={cn(
 								"bg-white rounded-2xl shadow-sm px-4 py-3.5 flex items-start gap-3",
-								address.isDefault && "ring-1 ring-orange-300"
+								address.isDefault && "ring-1 ring-orange-300",
 							)}
 						>
 							{/* Icon */}
 							<div
 								className={cn(
 									"w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5",
-									address.isDefault ? "bg-orange-500" : "bg-gray-100"
+									address.isDefault ? "bg-orange-500" : "bg-gray-100",
 								)}
 							>
 								<MapPin size={16} className={address.isDefault ? "text-white" : "text-gray-400"} />
@@ -130,38 +131,27 @@ export default function ProfileAddressesPage() {
 			</div>
 
 			{/* Delete confirmation sheet */}
-			{deleteTargetId !== null && (
-				<div className="fixed inset-0 z-[60] flex items-end">
+			<BottomSheet isOpen={deleteTargetId !== null} onClose={() => setDeleteTargetId(null)}>
+				<h2 className="text-lg font-bold text-gray-900 mb-1">{t.addresses.deleteConfirm}</h2>
+				<p className="text-sm text-gray-400 mb-6">{t.addresses.deleteConfirmDesc}</p>
+				<div className="flex gap-3">
 					<button
 						type="button"
-						aria-label="close"
-						className="absolute inset-0 bg-black/40"
 						onClick={() => setDeleteTargetId(null)}
-					/>
-					<div className="relative w-full bg-white rounded-t-3xl px-4 pt-4 pb-8 z-10">
-						<div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-5" />
-						<h2 className="text-lg font-bold text-gray-900 mb-1">{t.addresses.deleteConfirm}</h2>
-						<p className="text-sm text-gray-400 mb-6">{t.addresses.deleteConfirmDesc}</p>
-						<div className="flex gap-3">
-							<button
-								type="button"
-								onClick={() => setDeleteTargetId(null)}
-								className="flex-1 py-3.5 rounded-2xl border border-gray-200 text-gray-700 font-semibold text-sm"
-							>
-								{t.common.no}
-							</button>
-							<button
-								type="button"
-								onClick={handleDeleteConfirm}
-								disabled={isDeleting}
-								className="flex-1 py-3.5 rounded-2xl bg-red-500 text-white font-semibold text-sm disabled:opacity-60 flex items-center justify-center gap-2"
-							>
-								{isDeleting ? <Loader2 size={16} className="animate-spin" /> : t.common.delete}
-							</button>
-						</div>
-					</div>
+						className="flex-1 py-3.5 rounded-2xl border border-gray-200 text-gray-700 font-semibold text-sm"
+					>
+						{t.common.no}
+					</button>
+					<button
+						type="button"
+						onClick={handleDeleteConfirm}
+						disabled={isDeleting}
+						className="flex-1 py-3.5 rounded-2xl bg-red-500 text-white font-semibold text-sm disabled:opacity-60 flex items-center justify-center gap-2"
+					>
+						{isDeleting ? <Loader2 size={16} className="animate-spin" /> : t.common.delete}
+					</button>
 				</div>
-			)}
+			</BottomSheet>
 
 			{/* Address picker modal */}
 			<AddressPickerModal

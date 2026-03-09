@@ -1,4 +1,5 @@
 import { Check, ChevronLeft, Clock, Loader2, MapPin, Package, Star, X } from "lucide-react";
+import { BottomSheet } from "~/components/bottom-sheet";
 import { Skeleton } from "~/components/ui/skeleton";
 import type { OrderStatus } from "~/lib/api/types";
 import { formatPrice } from "~/lib/format";
@@ -315,38 +316,30 @@ export default function OrderDetailPage() {
 			)}
 
 			{/* Cancel confirm bottom sheet */}
-			{showCancelConfirm && (
-				<div className="fixed inset-0 z-[60] flex items-end">
+			<BottomSheet
+				isOpen={showCancelConfirm}
+				onClose={() => setShowCancelConfirm(false)}
+			>
+				<h2 className="text-lg font-bold text-gray-900 mb-1">{t.orders.cancelConfirm}</h2>
+				<p className="text-sm text-gray-400 mb-6">{t.orders.cancelConfirmDesc}</p>
+				<div className="flex gap-3">
 					<button
 						type="button"
-						aria-label="close"
-						className="absolute inset-0 bg-black/40"
 						onClick={() => setShowCancelConfirm(false)}
-					/>
-					<div className="relative w-full bg-white rounded-t-3xl px-4 pt-4 pb-8 z-10">
-						<div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-5" />
-						<h2 className="text-lg font-bold text-gray-900 mb-1">{t.orders.cancelConfirm}</h2>
-						<p className="text-sm text-gray-400 mb-6">{t.orders.cancelConfirmDesc}</p>
-						<div className="flex gap-3">
-							<button
-								type="button"
-								onClick={() => setShowCancelConfirm(false)}
-								className="flex-1 py-3.5 rounded-2xl border border-gray-200 text-gray-700 font-semibold text-sm"
-							>
-								{t.common.no}
-							</button>
-							<button
-								type="button"
-								onClick={handleCancel}
-								disabled={isCancelling}
-								className="flex-1 py-3.5 rounded-2xl bg-red-500 text-white font-semibold text-sm disabled:opacity-60 flex items-center justify-center gap-2"
-							>
-								{isCancelling ? <Loader2 size={16} className="animate-spin" /> : t.common.yes}
-							</button>
-						</div>
-					</div>
+						className="flex-1 py-3.5 rounded-2xl border border-gray-200 text-gray-700 font-semibold text-sm"
+					>
+						{t.common.no}
+					</button>
+					<button
+						type="button"
+						onClick={handleCancel}
+						disabled={isCancelling}
+						className="flex-1 py-3.5 rounded-2xl bg-red-500 text-white font-semibold text-sm disabled:opacity-60 flex items-center justify-center gap-2"
+					>
+						{isCancelling ? <Loader2 size={16} className="animate-spin" /> : t.common.yes}
+					</button>
 				</div>
-			)}
+			</BottomSheet>
 
 			{/* Rating modal */}
 			<RatingModal
