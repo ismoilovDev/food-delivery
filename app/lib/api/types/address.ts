@@ -5,15 +5,9 @@ export interface DeliveryAddressResMiniDto {
 	fullAddress?: string;
 	street?: string;
 	building?: string;
-	entrance?: string;
-	floor?: string;
 	apartment?: string;
-	intercom?: string;
 	latitude?: number;
 	longitude?: number;
-	city?: string;
-	postalCode?: string;
-	deliveryNotes?: string;
 	isDefault?: boolean;
 	contactName?: string;
 	contactPhone?: string;
