@@ -1,5 +1,10 @@
 import { api } from "~/lib/axios";
-import type { ApiResponse, DeliveryAddressReqDto, DeliveryAddressResMiniDto } from "../types";
+import type {
+	ApiResponse,
+	CreateAddressFromCoordinatesReqDto,
+	DeliveryAddressReqDto,
+	DeliveryAddressResMiniDto,
+} from "../types";
 
 const BASE = "/api/addresses/my-addresses";
 
@@ -10,6 +15,14 @@ export async function getMyAddresses() {
 
 export async function createAddress(body: DeliveryAddressReqDto) {
 	const res = await api.post<ApiResponse<DeliveryAddressResMiniDto>>(BASE, body);
+	return res.data;
+}
+
+export async function createAddressFromCoordinates(body: CreateAddressFromCoordinatesReqDto) {
+	const res = await api.post<ApiResponse<DeliveryAddressResMiniDto>>(
+		"/api/addresses/from-coordinates",
+		body
+	);
 	return res.data;
 }
 

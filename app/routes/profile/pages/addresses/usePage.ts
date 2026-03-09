@@ -1,21 +1,19 @@
 import { useState } from "react";
 import {
-	useCreateAddress,
+	useCreateAddressFromCoordinates,
 	useDeleteAddress,
 	useMyAddresses,
 	useSetDefaultAddress,
 } from "~/lib/api/hooks/useAddresses";
-import { useMe } from "~/lib/api/hooks/useUser";
 import { useAuthStore } from "~/store/authStore";
 import { useI18nStore } from "~/store/i18nStore";
 
 export function useProfileAddressesPage() {
 	const { t } = useI18nStore();
 	const user = useAuthStore((s) => s.user);
-	const { data: me } = useMe();
 
 	const { data: addresses = [], isLoading } = useMyAddresses();
-	const createAddress = useCreateAddress();
+	const createAddressFromCoords = useCreateAddressFromCoordinates();
 	const deleteAddress = useDeleteAddress();
 	const setDefault = useSetDefaultAddress();
 
@@ -33,17 +31,14 @@ export function useProfileAddressesPage() {
 		});
 	}
 
-	function handleSaveAddress(lat: number, lng: number, address: string) {
-		const contactName = me?.fullName ?? user?.fullName ?? "";
-		const contactPhone = me?.phone ?? user?.phone ?? "";
-		createAddress.mutate(
+	function handleSaveAddress(lat: number, lng: number) {
+		createAddressFromCoords.mutate(
 			{
-				fullAddress: address,
 				latitude: lat,
 				longitude: lng,
 				isDefault: addresses.length === 0,
-				contactName,
-				contactPhone,
+				contactName: user?.fullName ?? "",
+				contactPhone: user?.phone ?? "",
 			},
 			{ onSuccess: () => setIsPickerOpen(false) }
 		);
@@ -59,7 +54,7 @@ export function useProfileAddressesPage() {
 		setIsPickerOpen,
 		isDeleting: deleteAddress.isPending,
 		isSettingDefault: setDefault.isPending,
-		isSavingAddress: createAddress.isPending,
+		isSavingAddress: createAddressFromCoords.isPending,
 		handleSetDefault,
 		handleDeleteConfirm,
 		handleSaveAddress,

@@ -12,7 +12,7 @@ declare global {
 interface AddressPickerModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onSave: (lat: number, lng: number, address: string) => void;
+	onSave: (lat: number, lng: number) => void;
 	isSaving: boolean;
 	t: {
 		pickLocation: string;
@@ -168,7 +168,7 @@ export function AddressPickerModal({
 
 	function handleSave() {
 		const [lng, lat] = center;
-		onSave(lat, lng, address);
+		onSave(lat, lng);
 	}
 
 	if (!isOpen) return null;
@@ -254,7 +254,7 @@ export function AddressPickerModal({
 				<button
 					type="button"
 					onClick={handleSave}
-					disabled={isSaving || isGeocoding || !address}
+					disabled={isSaving || !mapReady}
 					className="w-full py-4 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold text-base shadow-lg shadow-orange-200 active:scale-[0.98] transition-transform disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
 				>
 					{isSaving ? <Loader2 size={18} className="animate-spin" /> : t.confirmAddress}
