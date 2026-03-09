@@ -45,9 +45,7 @@ export function RatingModal({
 						<Star
 							size={40}
 							className={
-								i < ratingValue
-									? "text-orange-400 fill-orange-400"
-									: "text-gray-200 fill-gray-200"
+								i < ratingValue ? "text-orange-400 fill-orange-400" : "text-gray-200 fill-gray-200"
 							}
 						/>
 					</button>

@@ -73,14 +73,14 @@ export default function ProfileAddressesPage() {
 							key={address.id}
 							className={cn(
 								"bg-white rounded-2xl shadow-sm px-4 py-3.5 flex items-start gap-3",
-								address.isDefault && "ring-1 ring-orange-300",
+								address.isDefault && "ring-1 ring-orange-300"
 							)}
 						>
 							{/* Icon */}
 							<div
 								className={cn(
 									"w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5",
-									address.isDefault ? "bg-orange-500" : "bg-gray-100",
+									address.isDefault ? "bg-orange-500" : "bg-gray-100"
 								)}
 							>
 								<MapPin size={16} className={address.isDefault ? "text-white" : "text-gray-400"} />

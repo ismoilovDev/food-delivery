@@ -131,9 +131,7 @@ export default function ProfilePage() {
 							type="button"
 							onClick={() => setPendingLang(l)}
 							className={`flex items-center justify-between px-4 py-4 rounded-2xl border-2 transition-all ${
-								pendingLang === l
-									? "border-orange-400 bg-orange-50"
-									: "border-gray-100 bg-white"
+								pendingLang === l ? "border-orange-400 bg-orange-50" : "border-gray-100 bg-white"
 							}`}
 						>
 							<span

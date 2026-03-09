@@ -316,10 +316,7 @@ export default function OrderDetailPage() {
 			)}
 
 			{/* Cancel confirm bottom sheet */}
-			<BottomSheet
-				isOpen={showCancelConfirm}
-				onClose={() => setShowCancelConfirm(false)}
-			>
+			<BottomSheet isOpen={showCancelConfirm} onClose={() => setShowCancelConfirm(false)}>
 				<h2 className="text-lg font-bold text-gray-900 mb-1">{t.orders.cancelConfirm}</h2>
 				<p className="text-sm text-gray-400 mb-6">{t.orders.cancelConfirmDesc}</p>
 				<div className="flex gap-3">
