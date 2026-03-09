@@ -40,7 +40,7 @@ export function useProfileAddressesPage() {
 				contactName: user?.fullName ?? "",
 				contactPhone: user?.phone ?? "",
 			},
-			{ onSuccess: () => setIsPickerOpen(false) },
+			{ onSuccess: () => setIsPickerOpen(false) }
 		);
 	}
 

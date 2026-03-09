@@ -21,7 +21,7 @@ export async function createAddress(body: DeliveryAddressReqDto) {
 export async function createAddressFromCoordinates(body: CreateAddressFromCoordinatesReqDto) {
 	const res = await api.post<ApiResponse<DeliveryAddressResMiniDto>>(
 		"/api/addresses/from-coordinates",
-		body,
+		body
 	);
 	return res.data;
 }
@@ -38,7 +38,7 @@ export async function deleteAddress(id: number) {
 
 export async function setDefaultAddress(id: number) {
 	const res = await api.patch<ApiResponse<DeliveryAddressResMiniDto>>(
-		`/api/addresses/${id}/set-default`,
+		`/api/addresses/${id}/set-default`
 	);
 	return res.data;
 }

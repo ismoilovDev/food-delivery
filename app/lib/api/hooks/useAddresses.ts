@@ -43,8 +43,7 @@ export function useCreateAddress() {
 export function useCreateAddressFromCoordinates() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (body: CreateAddressFromCoordinatesReqDto) =>
-			createAddressFromCoordinates(body),
+		mutationFn: (body: CreateAddressFromCoordinatesReqDto) => createAddressFromCoordinates(body),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: addressKeys.all }),
 	});
 }

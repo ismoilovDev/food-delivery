@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import {
-	useCreateAddressFromCoordinates,
-	useMyAddresses,
-} from "~/lib/api/hooks/useAddresses";
+import { useCreateAddressFromCoordinates, useMyAddresses } from "~/lib/api/hooks/useAddresses";
 import {
 	useApplyPromocode,
 	useCart,
@@ -34,7 +31,7 @@ export function useCartPage() {
 
 	const defaultAddress = addresses.find((a) => a.isDefault);
 	const [selectedAddressId, setSelectedAddressId] = useState<number | undefined>(
-		() => defaultAddress?.id,
+		() => defaultAddress?.id
 	);
 	const [isPickerOpen, setIsPickerOpen] = useState(false);
 	const [note, setNote] = useState("");
@@ -92,7 +89,7 @@ export function useCartPage() {
 					if (newId) setSelectedAddressId(newId);
 					setIsPickerOpen(false);
 				},
-			},
+			}
 		);
 	}
 
@@ -105,7 +102,7 @@ export function useCartPage() {
 			{
 				onSuccess: () => setPromoInput(""),
 				onError: () => setPromoError(t.cart.promoError),
-			},
+			}
 		);
 	}
 
@@ -129,7 +126,7 @@ export function useCartPage() {
 			},
 			{
 				onSuccess: () => navigate("/orders"),
-			},
+			}
 		);
 	}
 
