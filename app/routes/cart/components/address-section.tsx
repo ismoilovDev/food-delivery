@@ -1,9 +1,9 @@
 import { Check, MapPin, Plus } from "lucide-react";
-import type { DeliveryAddressDto } from "~/lib/api/types";
+import type { DeliveryAddressResMiniDto } from "~/lib/api/types";
 import { cn } from "~/lib/utils";
 
 interface AddressSectionProps {
-	addresses: DeliveryAddressDto[];
+	addresses: DeliveryAddressResMiniDto[];
 	selectedId: number | undefined;
 	onSelect: (id: number) => void;
 	onAddNew: () => void;
@@ -70,7 +70,7 @@ export function AddressSection({
 										isSelected ? "font-semibold text-gray-900" : "text-gray-600"
 									)}
 								>
-									{address.address}
+									{address.fullAddress ?? address.street ?? "—"}
 								</p>
 							</div>
 						</button>

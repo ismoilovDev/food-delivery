@@ -1,9 +1,9 @@
 import { ChevronRight, MapPin } from "lucide-react";
 import { Link } from "react-router";
-import type { DeliveryAddressDto } from "~/lib/api/types";
+import type { DeliveryAddressResMiniDto } from "~/lib/api/types";
 
 interface AddressRowProps {
-	address: DeliveryAddressDto | undefined;
+	address: DeliveryAddressResMiniDto | undefined;
 	selectLabel: string;
 }
 
@@ -22,7 +22,7 @@ export function AddressRow({ address, selectLabel }: AddressRowProps) {
 						<p className="text-xs text-gray-400 leading-none mb-0.5">
 							{address.label ?? selectLabel}
 						</p>
-						<p className="text-sm font-medium text-gray-800 truncate">{address.address}</p>
+						<p className="text-sm font-medium text-gray-800 truncate">{address.fullAddress}</p>
 					</>
 				) : (
 					<p className="text-sm font-medium text-gray-500">{selectLabel}</p>
