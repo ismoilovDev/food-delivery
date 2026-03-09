@@ -1,13 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	createAddress,
+	createAddressFromCoordinates,
 	deleteAddress,
 	getDefaultAddress,
 	getMyAddresses,
 	setDefaultAddress,
 	updateAddress,
 } from "../services/addresses";
-import type { DeliveryAddressReqDto } from "../types";
+import type { CreateAddressFromCoordinatesReqDto, DeliveryAddressReqDto } from "../types";
 
 export const addressKeys = {
 	all: ["addresses"] as const,
@@ -35,6 +36,15 @@ export function useCreateAddress() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: (body: DeliveryAddressReqDto) => createAddress(body),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: addressKeys.all }),
+	});
+}
+
+export function useCreateAddressFromCoordinates() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: (body: CreateAddressFromCoordinatesReqDto) =>
+			createAddressFromCoordinates(body),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: addressKeys.all }),
 	});
 }

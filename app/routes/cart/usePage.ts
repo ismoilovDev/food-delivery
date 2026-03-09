@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useCreateAddress, useMyAddresses } from "~/lib/api/hooks/useAddresses";
+import {
+	useCreateAddressFromCoordinates,
+	useMyAddresses,
+} from "~/lib/api/hooks/useAddresses";
 import {
 	useApplyPromocode,
 	useCart,
@@ -25,13 +28,13 @@ export function useCartPage() {
 	const removeItem = useRemoveCartItem();
 	const clearCart = useClearCart();
 	const createOrder = useCreateOrder();
-	const createAddress = useCreateAddress();
+	const createAddressFromCoords = useCreateAddressFromCoordinates();
 	const applyPromo = useApplyPromocode();
 	const removePromo = useRemovePromocode();
 
 	const defaultAddress = addresses.find((a) => a.isDefault);
 	const [selectedAddressId, setSelectedAddressId] = useState<number | undefined>(
-		() => defaultAddress?.id
+		() => defaultAddress?.id,
 	);
 	const [isPickerOpen, setIsPickerOpen] = useState(false);
 	const [note, setNote] = useState("");
@@ -40,7 +43,6 @@ export function useCartPage() {
 
 	const isEmpty = !cart?.items?.length;
 
-	// Sync selectedAddressId with default when addresses load
 	const resolvedSelectedId =
 		selectedAddressId ??
 		addresses.find((a) => a.isDefault)?.id ??
@@ -75,10 +77,9 @@ export function useCartPage() {
 		setIsPickerOpen(false);
 	}
 
-	function handleSaveAddress(lat: number, lng: number, address: string) {
-		createAddress.mutate(
+	function handleSaveAddress(lat: number, lng: number) {
+		createAddressFromCoords.mutate(
 			{
-				fullAddress: address,
 				latitude: lat,
 				longitude: lng,
 				contactName: user?.fullName ?? "",
@@ -91,7 +92,7 @@ export function useCartPage() {
 					if (newId) setSelectedAddressId(newId);
 					setIsPickerOpen(false);
 				},
-			}
+			},
 		);
 	}
 
@@ -104,7 +105,7 @@ export function useCartPage() {
 			{
 				onSuccess: () => setPromoInput(""),
 				onError: () => setPromoError(t.cart.promoError),
-			}
+			},
 		);
 	}
 
@@ -127,8 +128,8 @@ export function useCartPage() {
 				promocodeCode: cart.promocodeCode || undefined,
 			},
 			{
-				onSuccess: () => navigate("/profile/orders"),
-			}
+				onSuccess: () => navigate("/orders"),
+			},
 		);
 	}
 
@@ -160,7 +161,7 @@ export function useCartPage() {
 		canOrder,
 		isOrdering: createOrder.isPending,
 		isClearing: clearCart.isPending,
-		isSavingAddress: createAddress.isPending,
+		isSavingAddress: createAddressFromCoords.isPending,
 		subtotal,
 		discount,
 		total,

@@ -5,9 +5,30 @@ export interface DeliveryAddressResMiniDto {
 	fullAddress?: string;
 	street?: string;
 	building?: string;
+	entrance?: string;
+	floor?: string;
 	apartment?: string;
+	intercom?: string;
 	latitude?: number;
 	longitude?: number;
+	city?: string;
+	postalCode?: string;
+	deliveryNotes?: string;
+	isDefault?: boolean;
+	contactName?: string;
+	contactPhone?: string;
+}
+
+// POST /api/addresses/from-coordinates body
+export interface CreateAddressFromCoordinatesReqDto {
+	latitude: number;
+	longitude: number;
+	label?: string;
+	entrance?: string;
+	floor?: string;
+	apartment?: string;
+	intercom?: string;
+	deliveryNotes?: string;
 	isDefault?: boolean;
 	contactName?: string;
 	contactPhone?: string;
@@ -25,8 +46,11 @@ export interface DeliveryAddressReqDto {
 	intercom?: string;
 	latitude?: number;
 	longitude?: number;
+	city?: string;
+	postalCode?: string;
 	deliveryNotes?: string;
 	isDefault?: boolean;
+	isActive?: boolean;
 	contactName?: string;
 	contactPhone?: string;
 }
