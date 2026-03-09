@@ -31,7 +31,12 @@ export function RatingModal({
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-end">
-			<button type="button" aria-label="close" className="absolute inset-0 bg-black/40" onClick={onClose} />
+			<button
+				type="button"
+				aria-label="close"
+				className="absolute inset-0 bg-black/40"
+				onClick={onClose}
+			/>
 			<div className="relative w-full bg-white rounded-t-3xl px-4 pt-4 pb-8 z-10">
 				{/* Handle */}
 				<div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-4" />
