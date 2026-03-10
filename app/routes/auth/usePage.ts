@@ -18,7 +18,7 @@ export function useAuthPage() {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: intentional mount-only effect
 	useEffect(() => {
-		if (isAuthenticated && !import.meta.env.DEV) {
+		if (isAuthenticated) {
 			navigate("/menu", { replace: true });
 			return;
 		}
@@ -27,17 +27,6 @@ export function useAuthPage() {
 
 	async function doAuth() {
 		try {
-			const devToken = import.meta.env.VITE_DEV_ACCESS_TOKEN;
-			if (import.meta.env.DEV && devToken) {
-				setTokens(devToken, import.meta.env.VITE_DEV_REFRESH_TOKEN || "");
-				try {
-					const meRes = await getMe();
-					if (meRes.success && meRes.data) setUser(meRes.data);
-				} catch {}
-				navigate("/menu", { replace: true });
-				return;
-			}
-
 			const rawInitData = retrieveRawInitData();
 
 			if (!rawInitData) {
