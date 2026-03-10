@@ -1,10 +1,19 @@
-import { isLaunchParamsRetrieveError, retrieveRawInitData } from "@telegram-apps/sdk-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { telegramAuth } from "~/lib/api/services/auth";
 import { getMe } from "~/lib/api/services/users";
 import { useAuthStore } from "~/store/authStore";
 import { useI18nStore } from "~/store/i18nStore";
+
+declare global {
+	interface Window {
+		Telegram?: {
+			WebApp?: {
+				initData?: string;
+			};
+		};
+	}
+}
 
 export type AuthStatus = "loading" | "error" | "no-telegram";
 
@@ -27,14 +36,14 @@ export function useAuthPage() {
 
 	async function doAuth() {
 		try {
-			const rawInitData = retrieveRawInitData();
+			const initData = window.Telegram?.WebApp?.initData;
 
-			if (!rawInitData) {
+			if (!initData) {
 				setStatus("no-telegram");
 				return;
 			}
 
-			const authRes = await telegramAuth({ initData: rawInitData });
+			const authRes = await telegramAuth({ initData });
 
 			if (!authRes.success || !authRes.data) {
 				setErrorMsg(authRes.message || t.auth.authError);
@@ -55,10 +64,6 @@ export function useAuthPage() {
 
 			navigate("/menu", { replace: true });
 		} catch (err) {
-			if (isLaunchParamsRetrieveError(err)) {
-				setStatus("no-telegram");
-				return;
-			}
 			setErrorMsg(err instanceof Error ? err.message : t.auth.authError);
 			setStatus("error");
 		}
