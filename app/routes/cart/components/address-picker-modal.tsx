@@ -1,13 +1,7 @@
+import { Map as YMap, YMaps } from "@pbe/react-yandex-maps";
 import { AlertCircle, Loader2, MapPin, Navigation, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { YANDEX_MAPS_API_KEY } from "~/lib/config";
-
-declare global {
-	interface Window {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		ymaps3: any;
-	}
-}
 
 interface AddressPickerModalProps {
 	isOpen: boolean;
@@ -22,8 +16,8 @@ interface AddressPickerModalProps {
 	};
 }
 
-// Default center: Tashkent [lng, lat]
-const DEFAULT_CENTER: [number, number] = [69.2401, 41.2995];
+// Default center: Tashkent [lat, lng] — Maps 2.x format
+const DEFAULT_CENTER: [number, number] = [41.2995, 69.2401];
 
 export function AddressPickerModal({
 	isOpen,
@@ -32,8 +26,7 @@ export function AddressPickerModal({
 	isSaving,
 	t,
 }: AddressPickerModalProps) {
-	const mapContainerRef = useRef<HTMLDivElement>(null);
-	// biome-ignore lint/suspicious/noExplicitAny: ymaps3 untyped
+	// biome-ignore lint/suspicious/noExplicitAny: ymaps untyped
 	const mapRef = useRef<any>(null);
 	const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -44,7 +37,18 @@ export function AddressPickerModal({
 	const [mapReady, setMapReady] = useState(false);
 	const [mapError, setMapError] = useState("");
 
-	const reverseGeocodeCenter = useCallback(async (lng: number, lat: number) => {
+	// Reset state when modal closes
+	useEffect(() => {
+		if (!isOpen) {
+			if (debounceRef.current) clearTimeout(debounceRef.current);
+			setMapReady(false);
+			setAddress("");
+			setCenter(DEFAULT_CENTER);
+			setMapError("");
+		}
+	}, [isOpen]);
+
+	const reverseGeocodeCenter = useCallback(async (lat: number, lng: number) => {
 		setIsGeocoding(true);
 		try {
 			const { reverseGeocode } = await import("~/lib/api/services/location");
@@ -58,94 +62,32 @@ export function AddressPickerModal({
 		}
 	}, []);
 
-	function initMap() {
-		if (!mapContainerRef.current || mapRef.current) return;
-		if (!window.ymaps3) {
-			setMapError("Xarita yuklanmadi. API key tekshiring.");
-			return;
-		}
-
-		window.ymaps3.ready
-			.then(() => {
-				if (!mapContainerRef.current) return;
-
-				const map = new window.ymaps3.YMap(mapContainerRef.current, {
-					location: { center: DEFAULT_CENTER, zoom: 14 },
-					onUpdate: ({ location }: { location: { center: [number, number] } }) => {
-						const [lng, lat] = location.center;
-						setCenter([lng, lat]);
-						if (debounceRef.current) clearTimeout(debounceRef.current);
-						debounceRef.current = setTimeout(() => {
-							reverseGeocodeCenter(lng, lat);
-						}, 600);
-					},
-				});
-
-				map.addChild(new window.ymaps3.YMapDefaultSchemeLayer());
-				map.addChild(new window.ymaps3.YMapDefaultFeaturesLayer());
-
-				mapRef.current = map;
-				setMapReady(true);
-				reverseGeocodeCenter(DEFAULT_CENTER[0], DEFAULT_CENTER[1]);
-			})
-			.catch(() => {
-				setMapError("Xarita yuklanmadi. API key tekshiring.");
-			});
-	}
-
-	// Load Yandex Maps script when modal opens
-	useEffect(() => {
-		if (!isOpen) return;
-
-		const scriptId = "ymaps3-script";
-
-		if (!YANDEX_MAPS_API_KEY) {
-			setMapError("Yandex Maps API key mavjud emas.");
-			return;
-		}
-
-		// Script already in DOM — wait for ymaps3 to become available
-		if (document.getElementById(scriptId)) {
-			if (window.ymaps3) {
-				initMap();
-			} else {
-				// Script still loading — poll until ymaps3 is ready
-				const interval = setInterval(() => {
-					if (window.ymaps3) {
-						clearInterval(interval);
-						initMap();
-					}
-				}, 100);
+	const handleMapLoad = useCallback(
+		// biome-ignore lint/suspicious/noExplicitAny: ymaps untyped
+		(ymapsInstance: any) => {
+			if (!ymapsInstance) {
+				setMapError("Xarita yuklanmadi. API key ni tekshiring.");
+				return;
 			}
-			return;
-		}
+			setMapReady(true);
+			reverseGeocodeCenter(DEFAULT_CENTER[0], DEFAULT_CENTER[1]);
+		},
+		[reverseGeocodeCenter]
+	);
 
-		const script = document.createElement("script");
-		script.id = scriptId;
-		script.src = `https://api-maps.yandex.ru/3.0/?apikey=${YANDEX_MAPS_API_KEY}&lang=ru_RU`;
-		script.async = true;
-		script.onload = () => initMap();
-		script.onerror = () => setMapError("Xarita yuklanmadi. Internet yoki API key ni tekshiring.");
-		document.head.appendChild(script);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isOpen]);
-
-	// Destroy map when modal closes
-	useEffect(() => {
-		if (!isOpen) {
-			if (mapRef.current) {
-				try {
-					mapRef.current.destroy();
-				} catch {}
-				mapRef.current = null;
-			}
+	const handleBoundsChange = useCallback(
+		// biome-ignore lint/suspicious/noExplicitAny: ymaps event untyped
+		(e: any) => {
+			const newCenter = e.get("newCenter") as [number, number];
+			if (!newCenter) return;
+			setCenter(newCenter);
 			if (debounceRef.current) clearTimeout(debounceRef.current);
-			setMapReady(false);
-			setAddress("");
-			setCenter(DEFAULT_CENTER);
-			setMapError("");
-		}
-	}, [isOpen]);
+			debounceRef.current = setTimeout(() => {
+				reverseGeocodeCenter(newCenter[0], newCenter[1]);
+			}, 600);
+		},
+		[reverseGeocodeCenter]
+	);
 
 	function handleUseCurrentLocation() {
 		if (!navigator.geolocation) return;
@@ -153,12 +95,12 @@ export function AddressPickerModal({
 		navigator.geolocation.getCurrentPosition(
 			(pos) => {
 				const { latitude, longitude } = pos.coords;
-				const newCenter: [number, number] = [longitude, latitude];
+				const newCenter: [number, number] = [latitude, longitude];
 				setCenter(newCenter);
 				if (mapRef.current) {
-					mapRef.current.update({ location: { center: newCenter, zoom: 16 } });
+					mapRef.current.setCenter(newCenter, 16, { duration: 300 });
 				}
-				reverseGeocodeCenter(longitude, latitude);
+				reverseGeocodeCenter(latitude, longitude);
 				setIsLocating(false);
 			},
 			() => setIsLocating(false),
@@ -167,7 +109,7 @@ export function AddressPickerModal({
 	}
 
 	function handleSave() {
-		const [lng, lat] = center;
+		const [lat, lng] = center;
 		onSave(lat, lng);
 	}
 
@@ -204,8 +146,24 @@ export function AddressPickerModal({
 
 			{/* Map area */}
 			<div className="relative flex-1 overflow-hidden bg-gray-100">
-				{/* Map container — always mounted so ref is ready */}
-				<div ref={mapContainerRef} className="w-full h-full" />
+				{YANDEX_MAPS_API_KEY ? (
+					<YMaps query={{ apikey: YANDEX_MAPS_API_KEY, lang: "ru_RU" }}>
+						<YMap
+							instanceRef={mapRef}
+							defaultState={{ center: DEFAULT_CENTER, zoom: 14 }}
+							width="100%"
+							height="100%"
+							onLoad={handleMapLoad}
+							onBoundsChange={handleBoundsChange}
+							options={{ suppressMapOpenBlock: true }}
+						/>
+					</YMaps>
+				) : (
+					<div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gray-50 px-6">
+						<AlertCircle size={40} className="text-red-400" />
+						<p className="text-sm text-gray-500 text-center">Yandex Maps API key mavjud emas.</p>
+					</div>
+				)}
 
 				{/* Error state */}
 				{mapError && (
@@ -216,8 +174,8 @@ export function AddressPickerModal({
 				)}
 
 				{/* Loading state */}
-				{!mapReady && !mapError && (
-					<div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+				{!mapReady && !mapError && YANDEX_MAPS_API_KEY && (
+					<div className="absolute inset-0 flex items-center justify-center bg-gray-50 pointer-events-none">
 						<Loader2 size={32} className="text-orange-400 animate-spin" />
 					</div>
 				)}
