@@ -77,14 +77,14 @@ export default function OrderDetailPage() {
 							{isLoading ? "..." : `#${order?.orderNumber}`}
 						</h1>
 						{order && (
-							<p className="text-orange-100 text-xs mt-0.5">
-								{formatDate(order.createdAt)}
+							<div className="mt-0.5 space-y-0.5">
+								<p className="text-orange-100 text-xs">{formatDate(order.createdAt)}</p>
 								{order.estimatedDeliveryTime && (
-									<span className="ml-2">
-										· {t.orders.estimatedDelivery}: {formatDateTime(order.estimatedDeliveryTime)}
-									</span>
+									<p className="text-orange-100 text-xs">
+										{t.orders.estimatedDelivery}: {formatDateTime(order.estimatedDeliveryTime)}
+									</p>
 								)}
-							</p>
+							</div>
 						)}
 					</div>
 					{order && <OrderStatusBadge status={order.status} t={t.orders.status} />}

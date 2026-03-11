@@ -124,7 +124,7 @@ export const ru = {
 			REJECTED: "Отклонён",
 		},
 		timeline: {
-			ordered: "Заказ принят",
+			ordered: "Принят",
 			confirmed: "Подтверждён",
 			preparing: "Готовится",
 			onTheWay: "В пути",
