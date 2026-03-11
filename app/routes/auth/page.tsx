@@ -1,7 +1,9 @@
 import { useAuthPage } from "./usePage";
 
+const IS_DEV = import.meta.env.DEV;
+
 export default function AuthPage() {
-	const { status, errorMsg, retry, t } = useAuthPage();
+	const { status, errorMsg, devToken, setDevToken, handleDevLogin, retry, t } = useAuthPage();
 
 	if (status === "no-telegram") {
 		return (
@@ -9,6 +11,27 @@ export default function AuthPage() {
 				<div className="text-6xl mb-4">✈️</div>
 				<h1 className="text-xl font-semibold text-gray-800 mb-2">Telegram</h1>
 				<p className="text-gray-500 text-sm max-w-xs leading-relaxed">{t.auth.telegramRequired}</p>
+
+				{IS_DEV && (
+					<div className="mt-8 w-full max-w-xs flex flex-col gap-2">
+						<p className="text-xs text-gray-400 font-mono">DEV: token bilan kirish</p>
+						<input
+							type="text"
+							value={devToken}
+							onChange={(e) => setDevToken(e.target.value)}
+							placeholder="Access token..."
+							className="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl outline-none font-mono"
+						/>
+						<button
+							type="button"
+							onClick={handleDevLogin}
+							disabled={!devToken.trim()}
+							className="w-full py-2.5 bg-orange-500 text-white rounded-xl text-sm font-semibold disabled:opacity-40"
+						>
+							Kirish
+						</button>
+					</div>
+				)}
 			</div>
 		);
 	}

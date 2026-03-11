@@ -1,4 +1,5 @@
-import { Banknote, ChevronRight, CreditCard, Loader2, Trash2 } from "lucide-react";
+import { Banknote, ChevronRight, Loader2, Trash2 } from "lucide-react";
+import paymeLogo from "~/assets/images/payme.png";
 import { Skeleton } from "~/components/ui/skeleton";
 import { formatPrice } from "~/lib/format";
 import { AddressPickerModal } from "./components/address-picker-modal";
@@ -12,10 +13,7 @@ import { useCartPage } from "./usePage";
 
 const PAYMENT_ICONS: Record<string, React.ReactNode> = {
 	CASH: <Banknote size={16} className="text-green-500" />,
-	CARD: <CreditCard size={16} className="text-blue-500" />,
-	PAYME: <span className="text-xs font-bold text-blue-600">P</span>,
-	CLICK: <span className="text-xs font-bold text-green-600">C</span>,
-	UZUM: <span className="text-xs font-bold text-orange-500">U</span>,
+	PAYME: <img src={paymeLogo} alt="Payme" className="w-4 h-4 object-contain" />,
 };
 
 export default function CartPage() {
@@ -58,16 +56,7 @@ export default function CartPage() {
 		handlePlaceOrder,
 	} = useCartPage();
 
-	const paymentLabel =
-		paymentMethod === "CASH"
-			? t.cart.cash
-			: paymentMethod === "CARD"
-				? t.cart.card
-				: paymentMethod === "PAYME"
-					? t.cart.payme
-					: paymentMethod === "CLICK"
-						? t.cart.click
-						: t.cart.uzum;
+	const paymentLabel = paymentMethod === "CASH" ? t.cart.cash : t.cart.payme;
 
 	return (
 		<div className="min-h-screen bg-gray-50 flex flex-col pb-28">
@@ -245,10 +234,7 @@ export default function CartPage() {
 				t={{
 					selectPaymentMethod: t.cart.selectPaymentMethod,
 					cash: t.cart.cash,
-					card: t.cart.card,
 					payme: t.cart.payme,
-					click: t.cart.click,
-					uzum: t.cart.uzum,
 					paymentOnDelivery: t.cart.paymentOnDelivery,
 					paymentOnline: t.cart.paymentOnline,
 				}}

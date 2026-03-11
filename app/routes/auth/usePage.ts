@@ -11,6 +11,7 @@ export type AuthStatus = "loading" | "error" | "no-telegram";
 export function useAuthPage() {
 	const [status, setStatus] = useState<AuthStatus>("loading");
 	const [errorMsg, setErrorMsg] = useState("");
+	const [devToken, setDevToken] = useState("");
 	const navigate = useNavigate();
 
 	const { setTokens, setUser, isAuthenticated } = useAuthStore();
@@ -75,5 +76,18 @@ export function useAuthPage() {
 		doAuth();
 	}
 
-	return { status, errorMsg, retry, t };
+	async function handleDevLogin() {
+		const token = devToken.trim();
+		if (!token) return;
+		setTokens(token, "");
+		try {
+			const meRes = await getMe();
+			if (meRes.success && meRes.data) setUser(meRes.data);
+		} catch {
+			// not critical
+		}
+		navigate("/menu", { replace: true });
+	}
+
+	return { status, errorMsg, devToken, setDevToken, handleDevLogin, retry, t };
 }

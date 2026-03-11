@@ -124,7 +124,7 @@ export const uz = {
 			REJECTED: "Rad etildi",
 		},
 		timeline: {
-			ordered: "Buyurtma qabul qilindi",
+			ordered: "Qabul qilindi",
 			confirmed: "Tasdiqlandi",
 			preparing: "Tayyorlanmoqda",
 			onTheWay: "Yo'lda",

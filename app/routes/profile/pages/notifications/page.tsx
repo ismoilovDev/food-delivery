@@ -1,6 +1,7 @@
 import { Bell, BellOff, ChevronLeft, Loader2 } from "lucide-react";
 import { Link } from "react-router";
 import { Skeleton } from "~/components/ui/skeleton";
+import { formatDate } from "~/lib/format";
 import { useNotificationsPage } from "./usePage";
 
 export default function NotificationsPage() {
@@ -77,7 +78,7 @@ export default function NotificationsPage() {
 											{notif.title}
 										</p>
 										<span className="text-[10px] text-gray-400 shrink-0">
-											{notif.createdAt.slice(0, 10).split("-").reverse().join(".")}
+											{formatDate(notif.createdAt)}
 										</span>
 									</div>
 									<p className="text-xs text-gray-500 leading-snug line-clamp-2">{notif.message}</p>

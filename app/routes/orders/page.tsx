@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, Package } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Skeleton } from "~/components/ui/skeleton";
-import { formatPrice } from "~/lib/format";
+import { formatDate, formatPrice } from "~/lib/format";
 import { OrderStatusBadge } from "./components/order-status-badge";
 import type { FilterKey } from "./usePage";
 import { useOrdersPage } from "./usePage";
@@ -79,8 +79,7 @@ export default function OrdersPage() {
 								<div>
 									<p className="text-sm font-semibold text-gray-900">{order.restaurantName}</p>
 									<p className="text-xs text-gray-400 mt-0.5">
-										{order.itemsCount} {t.orders.items} ·{" "}
-										{order.createdAt.slice(0, 10).split("-").reverse().join(".")}
+										{t.orders.items} · {formatDate(order.createdAt)}
 									</p>
 								</div>
 								<p className="text-sm font-bold text-orange-500">

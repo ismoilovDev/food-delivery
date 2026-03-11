@@ -10,6 +10,9 @@ export type OrderStatus =
 	| "CANCELLED"
 	| "REJECTED";
 
+// Java LocalDateTime comes as [year, month, day, hour, minute, second, nanosecond]
+export type JavaDateTime = [number, number, number, number, number, number, number];
+
 export interface OrderItemReqDto {
 	productId: number;
 	quantity: number;
@@ -26,33 +29,60 @@ export interface OrderReqDto {
 
 export interface OrderItemDto {
 	id: number;
-	productId: number;
+	productId?: number;
 	productName: string;
 	quantity: number;
-	price: number;
+	unitPrice: number;
+	discountPrice: number;
+	totalPrice: number;
 	notes?: string;
+}
+
+export interface OrderDeliveryAddress {
+	id: number;
+	label?: string;
+	fullAddress?: string;
+	street?: string;
+	building?: string;
+	entrance?: string;
+	floor?: string;
+	apartment?: string;
+	latitude?: number;
+	longitude?: number;
+	contactName?: string;
+	contactPhone?: string;
+	deliveryNotes?: string;
 }
 
 export interface OrderDto {
 	id: number;
 	orderNumber: string;
-	userId: number;
-	restaurantId: number;
-	restaurantName: string;
-	deliveryAddressId: number;
+	customerId?: number;
+	customerName?: string;
+	customerPhone?: string;
 	courierId?: number;
-	items: OrderItemDto[];
+	courierName?: string;
+	restaurantId?: number;
+	restaurantName?: string;
 	status: OrderStatus;
-	totalAmount: number;
-	discountAmount: number;
+	items: OrderItemDto[];
+	subtotal: number;
 	deliveryFee: number;
-	paymentMethod?: string;
-	specialInstructions?: string;
+	serviceFee: number;
+	discountAmount: number;
+	totalAmount: number;
+	deliveryAddress?: OrderDeliveryAddress;
+	deliveryNotes?: string;
+	promocodeCode?: string;
+	estimatedDeliveryTime?: JavaDateTime;
+	cancellationReason?: string;
 	rating?: number;
 	review?: string;
-	createdAt: string;
-	updatedAt: string;
-	estimatedDeliveryTime?: string;
+	isPaid: boolean;
+	isPreorder: boolean;
+	scheduledDeliveryTime?: JavaDateTime;
+	createdAt: JavaDateTime;
+	updatedAt: JavaDateTime;
 }
 
 export interface OrderResMiniDto {
@@ -60,11 +90,9 @@ export interface OrderResMiniDto {
 	orderNumber: string;
 	status: OrderStatus;
 	totalAmount: number;
-	itemsCount: number;
-	restaurantName: string;
-	estimatedDeliveryTime?: string;
-	createdAt: string;
-	isPaid?: boolean;
+	restaurantName?: string;
+	estimatedDeliveryTime?: JavaDateTime;
+	createdAt: JavaDateTime;
 }
 
 export interface RateOrderReqDto {
