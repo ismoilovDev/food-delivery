@@ -58,16 +58,7 @@ export default function CartPage() {
 		handlePlaceOrder,
 	} = useCartPage();
 
-	const paymentLabel =
-		paymentMethod === "CASH"
-			? t.cart.cash
-			: paymentMethod === "CARD"
-				? t.cart.card
-				: paymentMethod === "PAYME"
-					? t.cart.payme
-					: paymentMethod === "CLICK"
-						? t.cart.click
-						: t.cart.uzum;
+	const paymentLabel = paymentMethod === "CASH" ? t.cart.cash : t.cart.payme;
 
 	return (
 		<div className="min-h-screen bg-gray-50 flex flex-col pb-28">
@@ -245,9 +236,7 @@ export default function CartPage() {
 				t={{
 					selectPaymentMethod: t.cart.selectPaymentMethod,
 					cash: t.cart.cash,
-					card: t.cart.card,
 					payme: t.cart.payme,
-					click: t.cart.click,
 					paymentOnDelivery: t.cart.paymentOnDelivery,
 					paymentOnline: t.cart.paymentOnline,
 				}}

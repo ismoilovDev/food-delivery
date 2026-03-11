@@ -1,4 +1,5 @@
-import { Banknote, CheckCircle2, CreditCard } from "lucide-react";
+import { Banknote, CheckCircle2 } from "lucide-react";
+import paymeLogo from "~/assets/images/payme.png";
 import { BottomSheet } from "~/components/bottom-sheet";
 import type { PaymentMethod } from "~/lib/api/types";
 
@@ -17,9 +18,7 @@ interface Props {
 	t: {
 		selectPaymentMethod: string;
 		cash: string;
-		card: string;
 		payme: string;
-		click: string;
 		paymentOnDelivery: string;
 		paymentOnline: string;
 	};
@@ -34,30 +33,10 @@ export function PaymentMethodSheet({ isOpen, selected, onSelect, onClose, t }: P
 			icon: <Banknote size={20} className="text-green-500" />,
 		},
 		{
-			method: "CARD",
-			label: t.card,
-			description: t.paymentOnline,
-			icon: <CreditCard size={20} className="text-blue-500" />,
-		},
-		{
 			method: "PAYME",
 			label: t.payme,
 			description: t.paymentOnline,
-			icon: (
-				<span className="w-5 h-5 flex items-center justify-center text-xs font-bold text-white bg-blue-600 rounded-full">
-					P
-				</span>
-			),
-		},
-		{
-			method: "CLICK",
-			label: t.click,
-			description: t.paymentOnline,
-			icon: (
-				<span className="w-5 h-5 flex items-center justify-center text-xs font-bold text-white bg-green-500 rounded-full">
-					C
-				</span>
-			),
+			icon: <img src={paymeLogo} alt="Payme" className="w-5 h-5 object-contain" />,
 		},
 	];
 
@@ -83,7 +62,9 @@ export function PaymentMethodSheet({ isOpen, selected, onSelect, onClose, t }: P
 								{opt.icon}
 							</div>
 							<div className="flex-1 text-left">
-								<p className={`text-sm font-semibold ${isSelected ? "text-orange-600" : "text-gray-900"}`}>
+								<p
+									className={`text-sm font-semibold ${isSelected ? "text-orange-600" : "text-gray-900"}`}
+								>
 									{opt.label}
 								</p>
 								<p className="text-xs text-gray-400 mt-0.5">{opt.description}</p>
