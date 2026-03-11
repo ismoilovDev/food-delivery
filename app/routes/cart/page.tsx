@@ -1,4 +1,4 @@
-import { Loader2, Trash2 } from "lucide-react";
+import { Banknote, ChevronRight, CreditCard, Loader2, Trash2 } from "lucide-react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { formatPrice } from "~/lib/format";
 import { AddressPickerModal } from "./components/address-picker-modal";
@@ -6,8 +6,17 @@ import { AddressSection } from "./components/address-section";
 import { CartItem } from "./components/cart-item";
 import { CartSummary } from "./components/cart-summary";
 import { EmptyCart } from "./components/empty-cart";
+import { PaymentMethodSheet } from "./components/payment-method-sheet";
 import { PromoSection } from "./components/promo-section";
 import { useCartPage } from "./usePage";
+
+const PAYMENT_ICONS: Record<string, React.ReactNode> = {
+	CASH: <Banknote size={16} className="text-green-500" />,
+	CARD: <CreditCard size={16} className="text-blue-500" />,
+	PAYME: <span className="text-xs font-bold text-blue-600">P</span>,
+	CLICK: <span className="text-xs font-bold text-green-600">C</span>,
+	UZUM: <span className="text-xs font-bold text-orange-500">U</span>,
+};
 
 export default function CartPage() {
 	const {
@@ -17,6 +26,10 @@ export default function CartPage() {
 		addresses,
 		selectedAddressId,
 		isPickerOpen,
+		isPaymentSheetOpen,
+		setIsPaymentSheetOpen,
+		paymentMethod,
+		setPaymentMethod,
 		note,
 		setNote,
 		promoInput,
@@ -44,6 +57,17 @@ export default function CartPage() {
 		handleSaveAddress,
 		handlePlaceOrder,
 	} = useCartPage();
+
+	const paymentLabel =
+		paymentMethod === "CASH"
+			? t.cart.cash
+			: paymentMethod === "CARD"
+				? t.cart.card
+				: paymentMethod === "PAYME"
+					? t.cart.payme
+					: paymentMethod === "CLICK"
+						? t.cart.click
+						: t.cart.uzum;
 
 	return (
 		<div className="min-h-screen bg-gray-50 flex flex-col pb-28">
@@ -100,6 +124,28 @@ export default function CartPage() {
 								onDecrement={() => handleDecrement(item.id, item.quantity)}
 							/>
 						))}
+					</div>
+
+					{/* Payment method */}
+					<div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+						<div className="px-4 pt-3.5 pb-2">
+							<h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+								{t.cart.paymentMethod}
+							</h2>
+						</div>
+						<button
+							type="button"
+							onClick={() => setIsPaymentSheetOpen(true)}
+							className="w-full flex items-center gap-3 px-4 pb-3.5 active:bg-gray-50 transition-colors"
+						>
+							<div className="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
+								{PAYMENT_ICONS[paymentMethod]}
+							</div>
+							<span className="flex-1 text-left text-sm font-medium text-gray-800">
+								{paymentLabel}
+							</span>
+							<ChevronRight size={16} className="text-gray-400" />
+						</button>
 					</div>
 
 					{/* Note */}
@@ -189,6 +235,24 @@ export default function CartPage() {
 					loadingAddress: t.cart.loadingAddress,
 				}}
 			/>
+
+			{/* Payment method sheet */}
+			<PaymentMethodSheet
+				isOpen={isPaymentSheetOpen}
+				selected={paymentMethod}
+				onSelect={setPaymentMethod}
+				onClose={() => setIsPaymentSheetOpen(false)}
+				t={{
+					selectPaymentMethod: t.cart.selectPaymentMethod,
+					cash: t.cart.cash,
+					card: t.cart.card,
+					payme: t.cart.payme,
+					click: t.cart.click,
+					uzum: t.cart.uzum,
+					paymentOnDelivery: t.cart.paymentOnDelivery,
+					paymentOnline: t.cart.paymentOnline,
+				}}
+			/>
 		</div>
 	);
 }
@@ -202,6 +266,7 @@ function CartSkeleton() {
 					<Skeleton key={i} className="h-20 w-full rounded-2xl" />
 				))}
 			</div>
+			<Skeleton className="h-16 w-full rounded-2xl" />
 			<Skeleton className="h-28 w-full rounded-2xl" />
 		</div>
 	);
