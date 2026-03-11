@@ -49,6 +49,7 @@ jobs:
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             set -e
+            export CI=true
             cd /var/www/food-delivery
 
             # pnpm yo'q bo'lsa o'rnatish
