@@ -62,7 +62,7 @@ jobs:
               npm install -g pm2
             fi
 
-            pnpm install --prod --no-frozen-lockfile
+            pnpm install --prod --no-frozen-lockfile --ignore-scripts
 
             pm2 describe food-delivery > /dev/null 2>&1 \
               && pm2 restart food-delivery \
