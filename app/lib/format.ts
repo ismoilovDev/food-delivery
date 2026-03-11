@@ -3,18 +3,29 @@ export function formatPrice(price: number): string {
 }
 
 // Java LocalDateTime comes as [year, month, day, hour, minute, second, nanosecond]
-export function formatDate(date: string | number[]): string {
+type JavaDateInput = string | number[];
+
+function toDate(date: JavaDateInput): Date {
 	if (Array.isArray(date)) {
-		const [year, month, day] = date;
-		return `${String(day).padStart(2, "0")}.${String(month).padStart(2, "0")}.${year}`;
+		const [year, month, day, hour = 0, minute = 0, second = 0] = date;
+		return new Date(year, month - 1, day, hour, minute, second);
 	}
-	return date.slice(0, 10).split("-").reverse().join(".");
+	return new Date(date);
 }
 
-export function formatDateTime(date: string | number[]): string {
-	if (Array.isArray(date)) {
-		const [year, month, day, hour, minute] = date;
-		return `${String(day).padStart(2, "0")}.${String(month).padStart(2, "0")}.${year} ${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-	}
-	return date.slice(0, 16).replace("T", " ");
+const pad = (n: number) => String(n).padStart(2, "0");
+
+export function formatDate(date: JavaDateInput): string {
+	const d = toDate(date);
+	return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
+}
+
+export function formatDateTime(date: JavaDateInput): string {
+	const d = toDate(date);
+	return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+export function formatTime(date: JavaDateInput): string {
+	const d = toDate(date);
+	return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
