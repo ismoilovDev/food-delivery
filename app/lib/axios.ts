@@ -45,7 +45,7 @@ api.interceptors.response.use(
 				setAccessToken(null);
 				// Token muddati tugagan — login sahifasiga yo'naltirish
 				if (typeof window !== "undefined") {
-					window.location.href = "/login";
+					window.location.href = "/";
 				}
 			}
 

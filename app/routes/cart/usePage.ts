@@ -1,7 +1,6 @@
 import { openLink } from "@telegram-apps/sdk-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useInitiatePayment } from "~/lib/api/hooks/usePayment";
 import { useCreateAddressFromCoordinates, useMyAddresses } from "~/lib/api/hooks/useAddresses";
 import {
 	useApplyPromocode,
@@ -12,6 +11,7 @@ import {
 	useUpdateCartItem,
 } from "~/lib/api/hooks/useCart";
 import { useCreateOrder } from "~/lib/api/hooks/useOrders";
+import { useInitiatePayment } from "~/lib/api/hooks/usePayment";
 import type { PaymentMethod } from "~/lib/api/types";
 import { useAuthStore } from "~/store/authStore";
 import { useI18nStore } from "~/store/i18nStore";
@@ -47,9 +47,7 @@ export function useCartPage() {
 	const isEmpty = !cart?.items?.length;
 
 	const resolvedSelectedId =
-		selectedAddressId ??
-		addresses.find((a) => a.isDefault)?.id ??
-		addresses[0]?.id;
+		selectedAddressId ?? addresses.find((a) => a.isDefault)?.id ?? addresses[0]?.id;
 
 	function handleIncrement(itemId: number, currentQty: number) {
 		updateItem.mutate({ itemId, quantity: currentQty + 1 });
