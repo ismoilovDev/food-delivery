@@ -1,5 +1,7 @@
+import { openLink } from "@telegram-apps/sdk-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useInitiatePayment } from "~/lib/api/hooks/usePayment";
 import { useCreateAddressFromCoordinates, useMyAddresses } from "~/lib/api/hooks/useAddresses";
 import {
 	useApplyPromocode,
@@ -10,6 +12,7 @@ import {
 	useUpdateCartItem,
 } from "~/lib/api/hooks/useCart";
 import { useCreateOrder } from "~/lib/api/hooks/useOrders";
+import type { PaymentMethod } from "~/lib/api/types";
 import { useAuthStore } from "~/store/authStore";
 import { useI18nStore } from "~/store/i18nStore";
 
@@ -25,6 +28,7 @@ export function useCartPage() {
 	const removeItem = useRemoveCartItem();
 	const clearCart = useClearCart();
 	const createOrder = useCreateOrder();
+	const initiatePayment = useInitiatePayment();
 	const createAddressFromCoords = useCreateAddressFromCoordinates();
 	const applyPromo = useApplyPromocode();
 	const removePromo = useRemovePromocode();
@@ -34,6 +38,8 @@ export function useCartPage() {
 		() => defaultAddress?.id
 	);
 	const [isPickerOpen, setIsPickerOpen] = useState(false);
+	const [isPaymentSheetOpen, setIsPaymentSheetOpen] = useState(false);
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("CASH");
 	const [note, setNote] = useState("");
 	const [promoInput, setPromoInput] = useState("");
 	const [promoError, setPromoError] = useState("");
@@ -43,8 +49,7 @@ export function useCartPage() {
 	const resolvedSelectedId =
 		selectedAddressId ??
 		addresses.find((a) => a.isDefault)?.id ??
-		addresses[0]?.id ??
-		(import.meta.env.DEV ? 1 : undefined);
+		addresses[0]?.id;
 
 	function handleIncrement(itemId: number, currentQty: number) {
 		updateItem.mutate({ itemId, quantity: currentQty + 1 });
@@ -121,15 +126,54 @@ export function useCartPage() {
 					productId: item.productId,
 					quantity: item.quantity,
 				})),
-				deliveryNotes: note || undefined,
+				notes: note || undefined,
+				paymentMethod,
 				promocodeCode: cart.promocodeCode || undefined,
 			},
 			{
-				onSuccess: () => navigate("/orders"),
+				onSuccess: (res) => {
+					const orderId = res.data?.id;
+					if (!orderId) {
+						navigate("/orders");
+						return;
+					}
+
+					if (paymentMethod === "CASH") {
+						navigate(`/orders/${orderId}`);
+						return;
+					}
+
+					// Online payment: initiate and open checkout URL
+					initiatePayment.mutate(
+						{ orderId, method: paymentMethod },
+						{
+							onSuccess: (payRes) => {
+								const checkoutUrl = payRes.data?.checkoutUrl;
+								if (checkoutUrl) {
+									try {
+										if (openLink.isAvailable()) {
+											openLink(checkoutUrl);
+										} else {
+											window.open(checkoutUrl, "_blank");
+										}
+									} catch {
+										window.open(checkoutUrl, "_blank");
+									}
+								}
+								navigate(`/orders/${orderId}`);
+							},
+							onError: () => {
+								// Payment initiation failed — still navigate to order detail
+								navigate(`/orders/${orderId}`);
+							},
+						}
+					);
+				},
 			}
 		);
 	}
 
+	const isProcessing = createOrder.isPending || initiatePayment.isPending;
 	const canOrder = !!cart?.items?.length && !!resolvedSelectedId;
 
 	const subtotal = cart?.totalAmount ?? 0;
@@ -144,6 +188,10 @@ export function useCartPage() {
 		addresses,
 		selectedAddressId: resolvedSelectedId,
 		isPickerOpen,
+		isPaymentSheetOpen,
+		setIsPaymentSheetOpen,
+		paymentMethod,
+		setPaymentMethod,
 		note,
 		setNote,
 		promoInput,
@@ -156,7 +204,7 @@ export function useCartPage() {
 		handleRemovePromo,
 		isEmpty,
 		canOrder,
-		isOrdering: createOrder.isPending,
+		isOrdering: isProcessing,
 		isClearing: clearCart.isPending,
 		isSavingAddress: createAddressFromCoords.isPending,
 		subtotal,

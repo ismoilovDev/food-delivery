@@ -27,7 +27,7 @@ export function useAuthPage() {
 
 	async function doAuth() {
 		try {
-			let initData: string;
+			let initData: string | undefined;
 			try {
 				initData = retrieveRawInitData();
 			} catch (err) {
@@ -36,6 +36,11 @@ export function useAuthPage() {
 					return;
 				}
 				throw err;
+			}
+
+			if (!initData) {
+				setStatus("no-telegram");
+				return;
 			}
 
 			const authRes = await telegramAuth({ initData });

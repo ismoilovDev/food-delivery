@@ -19,7 +19,8 @@ export interface OrderItemReqDto {
 export interface OrderReqDto {
 	deliveryAddressId: number;
 	items: OrderItemReqDto[];
-	deliveryNotes?: string;
+	notes?: string;
+	paymentMethod: import("./payment").PaymentMethod;
 	promocodeCode?: string;
 }
 
