@@ -115,7 +115,7 @@ export default function OrderDetailPage() {
 										<div key={step.key} className="flex flex-col items-center flex-1">
 											<div className="flex items-center w-full">
 												<div
-													className={`flex-1 h-0.5 ${i === 0 ? "invisible" : isDone || isCurrent ? "bg-orange-400" : "bg-gray-200"}`}
+													className={`h-0.5 ${i === 0 ? "w-0" : "flex-1"} ${isDone || isCurrent ? "bg-orange-400" : "bg-gray-200"}`}
 												/>
 												<div
 													className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-all ${

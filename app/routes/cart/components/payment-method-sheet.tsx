@@ -1,4 +1,5 @@
 import { Banknote, CheckCircle2, CreditCard } from "lucide-react";
+import { BottomSheet } from "~/components/bottom-sheet";
 import type { PaymentMethod } from "~/lib/api/types";
 
 interface PaymentOption {
@@ -60,62 +61,38 @@ export function PaymentMethodSheet({ isOpen, selected, onSelect, onClose, t }: P
 		},
 	];
 
-	if (!isOpen) return null;
-
 	return (
-		<>
-			{/* Backdrop */}
-			<button
-				type="button"
-				className="fixed inset-0 bg-black/40 z-50 backdrop-blur-sm w-full"
-				onClick={onClose}
-				aria-label="Close"
-			/>
-
-			{/* Sheet */}
-			<div className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-4 duration-300">
-				{/* Drag handle */}
-				<div className="flex justify-center pt-3 pb-1">
-					<div className="w-10 h-1 rounded-full bg-gray-200" />
-				</div>
-
-				{/* Title */}
-				<div className="px-5 py-3 border-b border-gray-100">
-					<h2 className="text-base font-semibold text-gray-900">{t.selectPaymentMethod}</h2>
-				</div>
-
-				{/* Options */}
-				<div className="px-4 py-3 flex flex-col gap-2 pb-8">
-					{options.map((opt) => {
-						const isSelected = selected === opt.method;
-						return (
-							<button
-								key={opt.method}
-								type="button"
-								onClick={() => {
-									onSelect(opt.method);
-									onClose();
-								}}
-								className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl border transition-all active:scale-[0.98] ${isSelected ? "border-orange-400 bg-orange-50" : "border-gray-100 bg-white"
-									}`}
-							>
-								<div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
-									{opt.icon}
-								</div>
-								<div className="flex-1 text-left">
-									<p
-										className={`text-sm font-semibold ${isSelected ? "text-orange-600" : "text-gray-900"}`}
-									>
-										{opt.label}
-									</p>
-									<p className="text-xs text-gray-400 mt-0.5">{opt.description}</p>
-								</div>
-								{isSelected && <CheckCircle2 size={18} className="text-orange-500 shrink-0" />}
-							</button>
-						);
-					})}
-				</div>
+		<BottomSheet isOpen={isOpen} onClose={onClose}>
+			<h2 className="text-base font-semibold text-gray-900 mb-4">{t.selectPaymentMethod}</h2>
+			<div className="flex flex-col gap-2">
+				{options.map((opt) => {
+					const isSelected = selected === opt.method;
+					return (
+						<button
+							key={opt.method}
+							type="button"
+							onClick={() => {
+								onSelect(opt.method);
+								onClose();
+							}}
+							className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl border transition-all active:scale-[0.98] ${
+								isSelected ? "border-orange-400 bg-orange-50" : "border-gray-100 bg-gray-50"
+							}`}
+						>
+							<div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center shrink-0">
+								{opt.icon}
+							</div>
+							<div className="flex-1 text-left">
+								<p className={`text-sm font-semibold ${isSelected ? "text-orange-600" : "text-gray-900"}`}>
+									{opt.label}
+								</p>
+								<p className="text-xs text-gray-400 mt-0.5">{opt.description}</p>
+							</div>
+							{isSelected && <CheckCircle2 size={18} className="text-orange-500 shrink-0" />}
+						</button>
+					);
+				})}
 			</div>
-		</>
+		</BottomSheet>
 	);
 }
