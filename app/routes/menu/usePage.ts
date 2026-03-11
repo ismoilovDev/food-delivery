@@ -45,7 +45,7 @@ export function useMenuPage() {
 		if (!isSearching) return undefined;
 		const q = searchQuery.toLowerCase();
 		return (allProducts ?? []).filter((p) => localName(p.name, lang).toLowerCase().includes(q));
-	}, [isSearching, searchQuery, allProducts]);
+	}, [isSearching, searchQuery, allProducts, lang]);
 
 	const displayProducts = isSearching ? searchResults : products;
 	const isLoading = productsLoading;
