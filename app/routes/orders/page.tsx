@@ -1,4 +1,5 @@
-import { ChevronRight, Package } from "lucide-react";
+import { ChevronLeft, ChevronRight, Package } from "lucide-react";
+import { useNavigate } from "react-router";
 import { Skeleton } from "~/components/ui/skeleton";
 import { formatPrice } from "~/lib/format";
 import { OrderStatusBadge } from "./components/order-status-badge";
@@ -9,11 +10,19 @@ const FILTER_KEYS: FilterKey[] = ["all", "active", "delivered", "cancelled"];
 
 export default function OrdersPage() {
 	const { t, orders, isLoading, activeFilter, setActiveFilter, handleOrderClick } = useOrdersPage();
+	const navigate = useNavigate();
 
 	return (
 		<div className="min-h-screen bg-gray-50 pb-8">
 			{/* Header */}
-			<div className="bg-gradient-to-br from-orange-500 to-red-500 px-4 pt-12 pb-4">
+			<div className="bg-gradient-to-br from-orange-500 to-red-500 px-4 pt-12 pb-4 flex items-center gap-3">
+				<button
+					type="button"
+					onClick={() => navigate(-1)}
+					className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center active:scale-90 transition-transform"
+				>
+					<ChevronLeft size={18} className="text-white" />
+				</button>
 				<h1 className="text-xl font-bold text-white">{t.orders.title}</h1>
 			</div>
 
