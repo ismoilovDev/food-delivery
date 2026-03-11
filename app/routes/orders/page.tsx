@@ -79,8 +79,7 @@ export default function OrdersPage() {
 								<div>
 									<p className="text-sm font-semibold text-gray-900">{order.restaurantName}</p>
 									<p className="text-xs text-gray-400 mt-0.5">
-										{t.orders.items} ·{" "}
-										{formatDate(order.createdAt)}
+										{t.orders.items} · {formatDate(order.createdAt)}
 									</p>
 								</div>
 								<p className="text-sm font-bold text-orange-500">
