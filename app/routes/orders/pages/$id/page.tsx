@@ -2,7 +2,7 @@ import { Check, ChevronLeft, Clock, Loader2, MapPin, Package, Star, X } from "lu
 import { BottomSheet } from "~/components/bottom-sheet";
 import { Skeleton } from "~/components/ui/skeleton";
 import type { OrderStatus } from "~/lib/api/types";
-import { formatPrice } from "~/lib/format";
+import { formatDate, formatDateTime, formatPrice } from "~/lib/format";
 import { OrderStatusBadge } from "../../components/order-status-badge";
 import { RatingModal } from "./components/rating-modal";
 import { useOrderDetailPage } from "./usePage";
@@ -78,10 +78,10 @@ export default function OrderDetailPage() {
 						</h1>
 						{order && (
 							<p className="text-orange-100 text-xs mt-0.5">
-								{order.createdAt.slice(0, 10).split("-").reverse().join(".")}
+								{formatDate(order.createdAt)}
 								{order.estimatedDeliveryTime && (
 									<span className="ml-2">
-										· {t.orders.estimatedDelivery}: {order.estimatedDeliveryTime}
+										· {t.orders.estimatedDelivery}: {formatDateTime(order.estimatedDeliveryTime)}
 									</span>
 								)}
 							</p>
@@ -113,13 +113,10 @@ export default function OrderDetailPage() {
 									const isCurrent = currentStep === i;
 									return (
 										<div key={step.key} className="flex flex-col items-center flex-1">
-											{/* Connector + circle row */}
 											<div className="flex items-center w-full">
-												{/* Left connector */}
 												<div
 													className={`flex-1 h-0.5 ${i === 0 ? "invisible" : isDone || isCurrent ? "bg-orange-400" : "bg-gray-200"}`}
 												/>
-												{/* Circle */}
 												<div
 													className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-all ${
 														isDone
@@ -137,12 +134,10 @@ export default function OrderDetailPage() {
 														<div className="w-2 h-2 rounded-full bg-gray-400" />
 													)}
 												</div>
-												{/* Right connector */}
 												<div
 													className={`flex-1 h-0.5 ${i === timelineSteps.length - 1 ? "invisible" : isDone ? "bg-orange-400" : "bg-gray-200"}`}
 												/>
 											</div>
-											{/* Label */}
 											<p
 												className={`text-[9px] font-medium text-center mt-1.5 leading-tight ${
 													isCurrent ? "text-orange-500" : isDone ? "text-gray-600" : "text-gray-300"
@@ -164,9 +159,7 @@ export default function OrderDetailPage() {
 								<p className="text-sm font-semibold text-red-700">
 									{t.orders.status[order.status]}
 								</p>
-								<p className="text-xs text-red-400 mt-0.5">
-									{order.createdAt.slice(0, 10).split("-").reverse().join(".")}
-								</p>
+								<p className="text-xs text-red-400 mt-0.5">{formatDate(order.createdAt)}</p>
 							</div>
 						</div>
 					)}
@@ -176,7 +169,7 @@ export default function OrderDetailPage() {
 						<div className="bg-orange-50 rounded-2xl px-4 py-3 flex items-center gap-3">
 							<Clock size={16} className="text-orange-500 shrink-0" />
 							<p className="text-sm font-medium text-orange-700">
-								{t.orders.estimatedDelivery}: {order.estimatedDeliveryTime}
+								{t.orders.estimatedDelivery}: {formatDateTime(order.estimatedDeliveryTime)}
 							</p>
 						</div>
 					)}
@@ -198,7 +191,7 @@ export default function OrderDetailPage() {
 										<span className="text-sm text-gray-800">{item.productName}</span>
 									</div>
 									<span className="text-sm font-semibold text-gray-700">
-										{formatPrice(item.price * item.quantity)} so'm
+										{formatPrice(item.totalPrice)} so'm
 									</span>
 								</div>
 							))}
@@ -239,7 +232,7 @@ export default function OrderDetailPage() {
 						<div className="space-y-2.5">
 							<div className="flex justify-between">
 								<span className="text-sm text-gray-500">{t.cart.subtotal}</span>
-								<span className="text-sm text-gray-800">{formatPrice(order.totalAmount)} so'm</span>
+								<span className="text-sm text-gray-800">{formatPrice(order.subtotal)} so'm</span>
 							</div>
 							{order.discountAmount > 0 && (
 								<div className="flex justify-between">
@@ -258,7 +251,7 @@ export default function OrderDetailPage() {
 							<div className="border-t border-gray-100 pt-2.5 flex justify-between">
 								<span className="text-sm font-semibold text-gray-900">{t.cart.total}</span>
 								<span className="text-base font-bold text-orange-500">
-									{formatPrice(order.totalAmount - order.discountAmount + order.deliveryFee)} so'm
+									{formatPrice(order.totalAmount)} so'm
 								</span>
 							</div>
 						</div>

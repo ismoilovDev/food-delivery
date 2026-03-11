@@ -248,7 +248,6 @@ export default function CartPage() {
 					card: t.cart.card,
 					payme: t.cart.payme,
 					click: t.cart.click,
-					uzum: t.cart.uzum,
 					paymentOnDelivery: t.cart.paymentOnDelivery,
 					paymentOnline: t.cart.paymentOnline,
 				}}

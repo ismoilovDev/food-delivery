@@ -19,7 +19,6 @@ interface Props {
 		card: string;
 		payme: string;
 		click: string;
-		uzum: string;
 		paymentOnDelivery: string;
 		paymentOnline: string;
 	};
@@ -56,16 +55,6 @@ export function PaymentMethodSheet({ isOpen, selected, onSelect, onClose, t }: P
 			icon: (
 				<span className="w-5 h-5 flex items-center justify-center text-xs font-bold text-white bg-green-500 rounded-full">
 					C
-				</span>
-			),
-		},
-		{
-			method: "UZUM",
-			label: t.uzum,
-			description: t.paymentOnline,
-			icon: (
-				<span className="w-5 h-5 flex items-center justify-center text-xs font-bold text-white bg-orange-500 rounded-full">
-					U
 				</span>
 			),
 		},
@@ -107,9 +96,8 @@ export function PaymentMethodSheet({ isOpen, selected, onSelect, onClose, t }: P
 									onSelect(opt.method);
 									onClose();
 								}}
-								className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl border transition-all active:scale-[0.98] ${
-									isSelected ? "border-orange-400 bg-orange-50" : "border-gray-100 bg-white"
-								}`}
+								className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl border transition-all active:scale-[0.98] ${isSelected ? "border-orange-400 bg-orange-50" : "border-gray-100 bg-white"
+									}`}
 							>
 								<div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
 									{opt.icon}

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useMyAddresses } from "~/lib/api/hooks/useAddresses";
 import { useCancelOrder, useOrder, useRateOrder } from "~/lib/api/hooks/useOrders";
 import { useI18nStore } from "~/store/i18nStore";
 
@@ -18,13 +17,10 @@ export function useOrderDetailPage() {
 	const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
 	const { data: order, isLoading } = useOrder(Number(id));
-	const { data: addresses = [] } = useMyAddresses();
 	const cancelOrder = useCancelOrder();
 	const rateOrder = useRateOrder();
 
-	const deliveryAddress = order
-		? (addresses.find((a) => a.id === order.deliveryAddressId) ?? null)
-		: null;
+	const deliveryAddress = order?.deliveryAddress ?? null;
 
 	const canCancel = !!order && CANCELLABLE_STATUSES.includes(order.status);
 	const canRate = !!order && RATABLE_STATUSES.includes(order.status) && !order.rating;
