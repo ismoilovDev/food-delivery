@@ -1,4 +1,5 @@
-import { Banknote, ChevronRight, CreditCard, Loader2, Trash2 } from "lucide-react";
+import { Banknote, ChevronRight, Loader2, Trash2 } from "lucide-react";
+import paymeLogo from "~/assets/images/payme.png";
 import { Skeleton } from "~/components/ui/skeleton";
 import { formatPrice } from "~/lib/format";
 import { AddressPickerModal } from "./components/address-picker-modal";
@@ -12,10 +13,7 @@ import { useCartPage } from "./usePage";
 
 const PAYMENT_ICONS: Record<string, React.ReactNode> = {
 	CASH: <Banknote size={16} className="text-green-500" />,
-	CARD: <CreditCard size={16} className="text-blue-500" />,
-	PAYME: <span className="text-xs font-bold text-blue-600">P</span>,
-	CLICK: <span className="text-xs font-bold text-green-600">C</span>,
-	UZUM: <span className="text-xs font-bold text-orange-500">U</span>,
+	PAYME: <img src={paymeLogo} alt="Payme" className="w-4 h-4 object-contain" />,
 };
 
 export default function CartPage() {
