@@ -6,8 +6,9 @@ import {
 	useUpdateCartItem,
 } from "~/lib/api/hooks/useCart";
 import { useRootCategories } from "~/lib/api/hooks/useCategories";
-import { useProductSearch, useProducts } from "~/lib/api/hooks/useProducts";
+import { useProducts } from "~/lib/api/hooks/useProducts";
 import { RESTAURANT_ID } from "~/lib/config";
+import { localName } from "~/lib/i18n";
 import { useI18nStore } from "~/store/i18nStore";
 
 export function useMenuPage() {
@@ -23,9 +24,8 @@ export function useMenuPage() {
 		restaurantId: RESTAURANT_ID,
 	});
 
-	const { data: searchResults, isLoading: searchLoading } = useProductSearch(searchQuery, {
-		restaurantId: RESTAURANT_ID,
-	});
+	// All products (no category filter) — used for client-side search
+	const { data: allProducts } = useProducts({ restaurantId: RESTAURANT_ID });
 
 	const { data: cart } = useCart();
 	const addCartItem = useAddCartItem();
@@ -41,8 +41,14 @@ export function useMenuPage() {
 	const cartTotalItems = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
 
 	const isSearching = searchQuery.length > 1;
+	const searchResults = useMemo(() => {
+		if (!isSearching) return undefined;
+		const q = searchQuery.toLowerCase();
+		return (allProducts ?? []).filter((p) => localName(p.name, lang).toLowerCase().includes(q));
+	}, [isSearching, searchQuery, allProducts]);
+
 	const displayProducts = isSearching ? searchResults : products;
-	const isLoading = productsLoading || (isSearching && searchLoading);
+	const isLoading = productsLoading;
 
 	function handleIncrement(productId: number) {
 		const item = cartItemMap.get(productId);
