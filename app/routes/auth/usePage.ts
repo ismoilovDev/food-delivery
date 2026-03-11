@@ -1,19 +1,10 @@
+import { isLaunchParamsRetrieveError, retrieveRawInitData } from "@telegram-apps/sdk-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { telegramAuth } from "~/lib/api/services/auth";
 import { getMe } from "~/lib/api/services/users";
 import { useAuthStore } from "~/store/authStore";
 import { useI18nStore } from "~/store/i18nStore";
-
-declare global {
-	interface Window {
-		Telegram?: {
-			WebApp?: {
-				initData?: string;
-			};
-		};
-	}
-}
 
 export type AuthStatus = "loading" | "error" | "no-telegram";
 
@@ -36,11 +27,15 @@ export function useAuthPage() {
 
 	async function doAuth() {
 		try {
-			const initData = window.Telegram?.WebApp?.initData;
-
-			if (!initData) {
-				setStatus("no-telegram");
-				return;
+			let initData: string;
+			try {
+				initData = retrieveRawInitData();
+			} catch (err) {
+				if (isLaunchParamsRetrieveError(err)) {
+					setStatus("no-telegram");
+					return;
+				}
+				throw err;
 			}
 
 			const authRes = await telegramAuth({ initData });
