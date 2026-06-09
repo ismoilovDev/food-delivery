@@ -34,7 +34,10 @@
 		"zustand": "^5.0.11"
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": ["esbuild", "msw"]
+		"onlyBuiltDependencies": [
+			"esbuild",
+			"msw"
+		]
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.5",
