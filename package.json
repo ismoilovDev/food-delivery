@@ -33,12 +33,6 @@
 		"vaul": "^1.1.2",
 		"zustand": "^5.0.11"
 	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"esbuild",
-			"msw"
-		]
-	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.5",
 		"@react-router/dev": "7.12.0",
