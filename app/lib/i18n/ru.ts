@@ -145,6 +145,11 @@ export const ru = {
 		noAddress: "Адрес не указан",
 		summarySection: "Итого",
 		items_section: "Состав заказа",
+		paymentSection: "Оплата",
+		paymentPaid: "Оплачено",
+		paymentPending: "Ожидание оплаты",
+		paymentUnpaid: "Не оплачено",
+		payNow: "Оплатить",
 	},
 
 	// Profile Info

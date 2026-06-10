@@ -1,4 +1,14 @@
-import { Check, ChevronLeft, Clock, Loader2, MapPin, Package, Star, X } from "lucide-react";
+import {
+	Check,
+	ChevronLeft,
+	Clock,
+	CreditCard,
+	Loader2,
+	MapPin,
+	Package,
+	Star,
+	X,
+} from "lucide-react";
 import { BottomSheet } from "~/components/bottom-sheet";
 import { Skeleton } from "~/components/ui/skeleton";
 import type { OrderStatus } from "~/lib/api/types";
@@ -40,6 +50,11 @@ export default function OrderDetailPage() {
 		canCancel,
 		canRate,
 		deliveryAddress,
+		isOnlinePayment,
+		isPaid,
+		canPay,
+		isPaying,
+		handlePay,
 		isCancelling,
 		isRatingOpen,
 		ratingValue,
@@ -257,6 +272,37 @@ export default function OrderDetailPage() {
 						</div>
 					</div>
 
+					{/* Payment status (online to'lovlar) */}
+					{isOnlinePayment && (
+						<div
+							className={`rounded-2xl px-4 py-3.5 flex items-center gap-3 ${
+								isPaid ? "bg-green-50" : "bg-amber-50"
+							}`}
+						>
+							<div
+								className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+									isPaid ? "bg-green-100" : "bg-amber-100"
+								}`}
+							>
+								{isPaid ? (
+									<Check size={16} className="text-green-600" />
+								) : (
+									<CreditCard size={16} className="text-amber-600" />
+								)}
+							</div>
+							<div className="flex-1 min-w-0">
+								<p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+									{t.orders.paymentSection}
+								</p>
+								<p
+									className={`text-sm font-semibold ${isPaid ? "text-green-700" : "text-amber-700"}`}
+								>
+									{isPaid ? t.orders.paymentPaid : t.orders.paymentPending}
+								</p>
+							</div>
+						</div>
+					)}
+
 					{/* Existing rating */}
 					{order.rating && (
 						<div className="bg-white rounded-2xl shadow-sm px-4 py-3.5">
@@ -282,8 +328,25 @@ export default function OrderDetailPage() {
 					)}
 
 					{/* Actions */}
-					{(canCancel || canRate) && (
+					{(canCancel || canRate || canPay) && (
 						<div className="flex flex-col gap-2">
+							{canPay && (
+								<button
+									type="button"
+									onClick={handlePay}
+									disabled={isPaying}
+									className="w-full py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-base shadow-lg shadow-green-200 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 disabled:opacity-60"
+								>
+									{isPaying ? (
+										<Loader2 size={18} className="animate-spin" />
+									) : (
+										<>
+											<CreditCard size={18} />
+											{t.orders.payNow}
+										</>
+									)}
+								</button>
+							)}
 							{canRate && (
 								<button
 									type="button"
