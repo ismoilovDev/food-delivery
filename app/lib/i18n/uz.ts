@@ -145,6 +145,11 @@ export const uz = {
 		noAddress: "Manzil ko'rsatilmagan",
 		summarySection: "Hisob-kitob",
 		items_section: "Buyurtma tarkibi",
+		paymentSection: "To'lov",
+		paymentPaid: "To'landi",
+		paymentPending: "To'lov kutilmoqda",
+		paymentUnpaid: "To'lanmagan",
+		payNow: "To'lash",
 	},
 
 	// Profile Info

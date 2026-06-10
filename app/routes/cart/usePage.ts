@@ -1,4 +1,3 @@
-import { openLink } from "@telegram-apps/sdk-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useCreateAddressFromCoordinates, useMyAddresses } from "~/lib/api/hooks/useAddresses";
@@ -13,6 +12,7 @@ import {
 import { useCreateOrder } from "~/lib/api/hooks/useOrders";
 import { useInitiatePayment } from "~/lib/api/hooks/usePayment";
 import type { PaymentMethod } from "~/lib/api/types";
+import { openCheckout } from "~/lib/openCheckout";
 import { useAuthStore } from "~/store/authStore";
 import { useI18nStore } from "~/store/i18nStore";
 
@@ -146,18 +146,8 @@ export function useCartPage() {
 						{ orderId, method: paymentMethod },
 						{
 							onSuccess: (payRes) => {
-								const checkoutUrl = payRes.data?.checkoutUrl;
-								if (checkoutUrl) {
-									try {
-										if (openLink.isAvailable()) {
-											openLink(checkoutUrl);
-										} else {
-											window.open(checkoutUrl, "_blank");
-										}
-									} catch {
-										window.open(checkoutUrl, "_blank");
-									}
-								}
+								const checkoutUrl = payRes.data;
+								if (checkoutUrl) openCheckout(checkoutUrl);
 								navigate(`/orders/${orderId}`);
 							},
 							onError: () => {
