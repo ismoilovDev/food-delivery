@@ -17,6 +17,7 @@ export function useOrderDetailPage() {
 	const [ratingValue, setRatingValue] = useState(0);
 	const [reviewText, setReviewText] = useState("");
 	const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+	const [payError, setPayError] = useState("");
 
 	const { data: order, isLoading } = useOrder(Number(id));
 	const cancelOrder = useCancelOrder();
@@ -30,19 +31,26 @@ export function useOrderDetailPage() {
 	const canCancel = !!order && CANCELLABLE_STATUSES.includes(order.status);
 	const canRate = !!order && RATABLE_STATUSES.includes(order.status) && !order.rating;
 
-	// To'lov holati. Backend status: COMPLETED = to'langan.
-	const hasPayment = !!payment;
-	const isPaid = payment?.status === "COMPLETED";
+	// To'lov holati. order.isPaid yoki payment.status=COMPLETED = to'langan.
+	const isPaid = order?.isPaid === true || payment?.status === "COMPLETED";
 	const isOrderDead = order?.status === "CANCELLED" || order?.status === "REJECTED";
-	const canPay = hasPayment && !isPaid && !isOrderDead;
+	// Faqat Payme. To'lanmagan va bekor bo'lmagan har qanday buyurtmani to'lash mumkin
+	// (to'lov yozuvi hali yaratilmagan bo'lsa ham — handlePay uni boshlaydi).
+	const showPayment = !!order && !isOrderDead;
+	const canPay = showPayment && !isPaid;
 
 	function handlePay() {
-		if (!order || !payment) return;
+		if (!order) return;
+		setPayError("");
 		initiatePayment.mutate(
-			{ orderId: order.id, method: payment.paymentMethod },
+			{ orderId: order.id, method: "PAYME" },
 			{
 				onSuccess: (res) => {
 					if (res.data) openCheckout(res.data);
+					else setPayError(t.common.error);
+				},
+				onError: (err) => {
+					setPayError(err instanceof Error ? err.message : t.common.error);
 				},
 			}
 		);
@@ -69,10 +77,11 @@ export function useOrderDetailPage() {
 		canRate,
 		deliveryAddress,
 		payment,
-		hasPayment,
+		showPayment,
 		isPaid,
 		canPay,
 		isPaying: initiatePayment.isPending,
+		payError,
 		handlePay,
 		isCancelling: cancelOrder.isPending,
 		isRatingOpen,
