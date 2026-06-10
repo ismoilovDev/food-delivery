@@ -11,7 +11,7 @@ import {
 } from "~/lib/api/hooks/useCart";
 import { useCreateOrder } from "~/lib/api/hooks/useOrders";
 import { useInitiatePayment } from "~/lib/api/hooks/usePayment";
-import type { CreateAddressFromCoordinatesReqDto, PaymentMethod } from "~/lib/api/types";
+import type { CreateAddressFromCoordinatesReqDto } from "~/lib/api/types";
 import { openCheckout } from "~/lib/openCheckout";
 import { useAuthStore } from "~/store/authStore";
 import { useI18nStore } from "~/store/i18nStore";
@@ -38,12 +38,11 @@ export function useCartPage() {
 		() => defaultAddress?.id
 	);
 	const [isPickerOpen, setIsPickerOpen] = useState(false);
-	const [isPaymentSheetOpen, setIsPaymentSheetOpen] = useState(false);
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("CASH");
 	const [note, setNote] = useState("");
 	const [promoInput, setPromoInput] = useState("");
 	const [promoError, setPromoError] = useState("");
 	const [saveAddressError, setSaveAddressError] = useState("");
+	const [orderError, setOrderError] = useState("");
 
 	const isEmpty = !cart?.items?.length;
 
@@ -126,34 +125,32 @@ export function useCartPage() {
 
 	function handlePlaceOrder() {
 		if (!cart || !resolvedSelectedId) return;
+		setOrderError("");
 
+		// Buyurtma yaratish (DELIVERY). Backend OrderReqDto: deliveryType majburiy,
+		// paymentMethod yo'q — to'lov alohida /payments/initiate orqali boshlanadi.
 		createOrder.mutate(
 			{
+				deliveryType: "DELIVERY",
 				deliveryAddressId: resolvedSelectedId,
 				items: cart.items.map((item) => ({
 					productId: item.productId,
 					quantity: item.quantity,
 				})),
-				notes: note || undefined,
-				paymentMethod,
+				deliveryNotes: note || undefined,
 				promocodeCode: cart.promocodeCode || undefined,
 			},
 			{
 				onSuccess: (res) => {
 					const orderId = res.data?.id;
 					if (!orderId) {
-						navigate("/orders");
+						setOrderError(t.cart.orderError);
 						return;
 					}
 
-					if (paymentMethod === "CASH") {
-						navigate(`/orders/${orderId}`);
-						return;
-					}
-
-					// Online payment: initiate and open checkout URL
+					// Hozircha faqat Payme. To'lovni boshlab, checkout URL'ni ochamiz.
 					initiatePayment.mutate(
-						{ orderId, method: paymentMethod },
+						{ orderId, method: "PAYME" },
 						{
 							onSuccess: (payRes) => {
 								const checkoutUrl = payRes.data;
@@ -161,11 +158,15 @@ export function useCartPage() {
 								navigate(`/orders/${orderId}`);
 							},
 							onError: () => {
-								// Payment initiation failed — still navigate to order detail
+								// Order yaratildi, lekin to'lov boshlanmadi —
+								// foydalanuvchi buyurtma sahifasida qayta urinishi mumkin.
 								navigate(`/orders/${orderId}`);
 							},
 						}
 					);
+				},
+				onError: (err) => {
+					setOrderError(err instanceof Error ? err.message : t.cart.orderError);
 				},
 			}
 		);
@@ -186,10 +187,6 @@ export function useCartPage() {
 		addresses,
 		selectedAddressId: resolvedSelectedId,
 		isPickerOpen,
-		isPaymentSheetOpen,
-		setIsPaymentSheetOpen,
-		paymentMethod,
-		setPaymentMethod,
 		note,
 		setNote,
 		promoInput,
@@ -206,6 +203,7 @@ export function useCartPage() {
 		isClearing: clearCart.isPending,
 		isSavingAddress: createAddressFromCoords.isPending,
 		saveAddressError,
+		orderError,
 		subtotal,
 		discount,
 		total,

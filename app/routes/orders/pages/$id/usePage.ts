@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useCancelOrder, useOrder, useRateOrder } from "~/lib/api/hooks/useOrders";
 import { useInitiatePayment, usePaymentByOrder } from "~/lib/api/hooks/usePayment";
-import type { PaymentMethod } from "~/lib/api/types";
 import { openCheckout } from "~/lib/openCheckout";
 import { useI18nStore } from "~/store/i18nStore";
 
@@ -31,16 +30,16 @@ export function useOrderDetailPage() {
 	const canCancel = !!order && CANCELLABLE_STATUSES.includes(order.status);
 	const canRate = !!order && RATABLE_STATUSES.includes(order.status) && !order.rating;
 
-	// To'lov holati (online to'lovlar uchun)
-	const isOnlinePayment = !!payment && payment.method !== "CASH";
-	const isPaid = payment?.status === "PAID";
+	// To'lov holati. Backend status: COMPLETED = to'langan.
+	const hasPayment = !!payment;
+	const isPaid = payment?.status === "COMPLETED";
 	const isOrderDead = order?.status === "CANCELLED" || order?.status === "REJECTED";
-	const canPay = isOnlinePayment && !isPaid && !isOrderDead;
+	const canPay = hasPayment && !isPaid && !isOrderDead;
 
 	function handlePay() {
-		if (!order || !payment || payment.method === "CASH") return;
+		if (!order || !payment) return;
 		initiatePayment.mutate(
-			{ orderId: order.id, method: payment.method as Exclude<PaymentMethod, "CASH"> },
+			{ orderId: order.id, method: payment.paymentMethod },
 			{
 				onSuccess: (res) => {
 					if (res.data) openCheckout(res.data);
@@ -70,7 +69,7 @@ export function useOrderDetailPage() {
 		canRate,
 		deliveryAddress,
 		payment,
-		isOnlinePayment,
+		hasPayment,
 		isPaid,
 		canPay,
 		isPaying: initiatePayment.isPending,

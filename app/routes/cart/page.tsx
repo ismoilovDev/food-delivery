@@ -1,4 +1,4 @@
-import { Banknote, ChevronRight, Loader2, Trash2 } from "lucide-react";
+import { AlertCircle, Loader2, Trash2 } from "lucide-react";
 import paymeLogo from "~/assets/images/payme.png";
 import { Skeleton } from "~/components/ui/skeleton";
 import { formatPrice } from "~/lib/format";
@@ -7,14 +7,8 @@ import { AddressSection } from "./components/address-section";
 import { CartItem } from "./components/cart-item";
 import { CartSummary } from "./components/cart-summary";
 import { EmptyCart } from "./components/empty-cart";
-import { PaymentMethodSheet } from "./components/payment-method-sheet";
 import { PromoSection } from "./components/promo-section";
 import { useCartPage } from "./usePage";
-
-const PAYMENT_ICONS: Record<string, React.ReactNode> = {
-	CASH: <Banknote size={16} className="text-green-500" />,
-	PAYME: <img src={paymeLogo} alt="Payme" className="w-4 h-4 object-contain" />,
-};
 
 export default function CartPage() {
 	const {
@@ -24,10 +18,6 @@ export default function CartPage() {
 		addresses,
 		selectedAddressId,
 		isPickerOpen,
-		isPaymentSheetOpen,
-		setIsPaymentSheetOpen,
-		paymentMethod,
-		setPaymentMethod,
 		note,
 		setNote,
 		promoInput,
@@ -55,9 +45,8 @@ export default function CartPage() {
 		handleSaveAddress,
 		handlePlaceOrder,
 		saveAddressError,
+		orderError,
 	} = useCartPage();
-
-	const paymentLabel = paymentMethod === "CASH" ? t.cart.cash : t.cart.payme;
 
 	return (
 		<div className="min-h-screen bg-gray-50 flex flex-col pb-28">
@@ -116,26 +105,22 @@ export default function CartPage() {
 						))}
 					</div>
 
-					{/* Payment method */}
+					{/* Payment method — hozircha faqat Payme */}
 					<div className="bg-white rounded-2xl shadow-sm overflow-hidden">
 						<div className="px-4 pt-3.5 pb-2">
 							<h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
 								{t.cart.paymentMethod}
 							</h2>
 						</div>
-						<button
-							type="button"
-							onClick={() => setIsPaymentSheetOpen(true)}
-							className="w-full flex items-center gap-3 px-4 pb-3.5 active:bg-gray-50 transition-colors"
-						>
+						<div className="w-full flex items-center gap-3 px-4 pb-3.5">
 							<div className="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
-								{PAYMENT_ICONS[paymentMethod]}
+								<img src={paymeLogo} alt="Payme" className="w-4 h-4 object-contain" />
 							</div>
 							<span className="flex-1 text-left text-sm font-medium text-gray-800">
-								{paymentLabel}
+								{t.cart.payme}
 							</span>
-							<ChevronRight size={16} className="text-gray-400" />
-						</button>
+							<span className="text-xs text-gray-400">{t.cart.paymentOnline}</span>
+						</div>
 					</div>
 
 					{/* Note */}
@@ -192,6 +177,12 @@ export default function CartPage() {
 			{/* Order button */}
 			{!isLoading && !isEmpty && (
 				<div className="fixed bottom-[64px] left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-3 z-40">
+					{orderError && (
+						<div className="mb-2 flex items-start gap-2 rounded-xl bg-red-50 px-3 py-2.5">
+							<AlertCircle size={16} className="text-red-500 shrink-0 mt-0.5" />
+							<p className="text-xs text-red-600 leading-relaxed break-words">{orderError}</p>
+						</div>
+					)}
 					<button
 						type="button"
 						onClick={handlePlaceOrder}
@@ -224,21 +215,6 @@ export default function CartPage() {
 					useCurrentLocation: t.cart.useCurrentLocation,
 					confirmAddress: t.cart.confirmAddress,
 					loadingAddress: t.cart.loadingAddress,
-				}}
-			/>
-
-			{/* Payment method sheet */}
-			<PaymentMethodSheet
-				isOpen={isPaymentSheetOpen}
-				selected={paymentMethod}
-				onSelect={setPaymentMethod}
-				onClose={() => setIsPaymentSheetOpen(false)}
-				t={{
-					selectPaymentMethod: t.cart.selectPaymentMethod,
-					cash: t.cart.cash,
-					payme: t.cart.payme,
-					paymentOnDelivery: t.cart.paymentOnDelivery,
-					paymentOnline: t.cart.paymentOnline,
 				}}
 			/>
 		</div>

@@ -2,8 +2,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getPaymentByOrder, initiatePayment } from "../services/payment";
 import type { ApiResponse, PaymentDto, PaymentMethod } from "../types";
 
-type OnlinePaymentMethod = Exclude<PaymentMethod, "CASH">;
-
 export const paymentKeys = {
 	all: ["payment"] as const,
 	byOrder: (orderId: number) => [...paymentKeys.all, "order", orderId] as const,
@@ -11,7 +9,7 @@ export const paymentKeys = {
 
 export function useInitiatePayment() {
 	return useMutation({
-		mutationFn: ({ orderId, method }: { orderId: number; method: OnlinePaymentMethod }) =>
+		mutationFn: ({ orderId, method = "PAYME" }: { orderId: number; method?: PaymentMethod }) =>
 			initiatePayment(orderId, method),
 	});
 }
@@ -19,7 +17,7 @@ export function useInitiatePayment() {
 /**
  * Buyurtmaning to'lov holatini oladi.
  * `PENDING` bo'lsa — Payme javobini kutib, har necha soniyada qayta so'raydi.
- * CASH buyurtmalarda to'lov yozuvi bo'lmasligi mumkin (xato → undefined).
+ * To'lov yozuvi hali yaratilmagan bo'lsa (xato) — undefined qaytadi.
  */
 export function usePaymentByOrder(orderId: number | undefined, enabled = true) {
 	return useQuery({

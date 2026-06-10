@@ -50,7 +50,7 @@ export default function OrderDetailPage() {
 		canCancel,
 		canRate,
 		deliveryAddress,
-		isOnlinePayment,
+		hasPayment,
 		isPaid,
 		canPay,
 		isPaying,
@@ -273,7 +273,7 @@ export default function OrderDetailPage() {
 					</div>
 
 					{/* Payment status (online to'lovlar) */}
-					{isOnlinePayment && (
+					{hasPayment && (
 						<div
 							className={`rounded-2xl px-4 py-3.5 flex items-center gap-3 ${
 								isPaid ? "bg-green-50" : "bg-amber-50"
