@@ -8,6 +8,7 @@ interface AddressPickerModalProps {
 	onClose: () => void;
 	onSave: (lat: number, lng: number) => void;
 	isSaving: boolean;
+	saveError?: string;
 	t: {
 		pickLocation: string;
 		useCurrentLocation: string;
@@ -24,6 +25,7 @@ export function AddressPickerModal({
 	onClose,
 	onSave,
 	isSaving,
+	saveError,
 	t,
 }: AddressPickerModalProps) {
 	// biome-ignore lint/suspicious/noExplicitAny: ymaps untyped
@@ -209,6 +211,12 @@ export function AddressPickerModal({
 
 			{/* Save button */}
 			<div className="px-4 py-4 border-t border-gray-100 shrink-0">
+				{saveError && (
+					<div className="mb-3 flex items-start gap-2 rounded-xl bg-red-50 px-3 py-2.5">
+						<AlertCircle size={16} className="text-red-500 shrink-0 mt-0.5" />
+						<p className="text-xs text-red-600 leading-relaxed break-words">{saveError}</p>
+					</div>
+				)}
 				<button
 					type="button"
 					onClick={handleSave}

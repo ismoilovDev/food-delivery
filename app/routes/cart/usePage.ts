@@ -11,7 +11,7 @@ import {
 } from "~/lib/api/hooks/useCart";
 import { useCreateOrder } from "~/lib/api/hooks/useOrders";
 import { useInitiatePayment } from "~/lib/api/hooks/usePayment";
-import type { PaymentMethod } from "~/lib/api/types";
+import type { CreateAddressFromCoordinatesReqDto, PaymentMethod } from "~/lib/api/types";
 import { openCheckout } from "~/lib/openCheckout";
 import { useAuthStore } from "~/store/authStore";
 import { useI18nStore } from "~/store/i18nStore";
@@ -43,6 +43,7 @@ export function useCartPage() {
 	const [note, setNote] = useState("");
 	const [promoInput, setPromoInput] = useState("");
 	const [promoError, setPromoError] = useState("");
+	const [saveAddressError, setSaveAddressError] = useState("");
 
 	const isEmpty = !cart?.items?.length;
 
@@ -70,6 +71,7 @@ export function useCartPage() {
 	}
 
 	function handleOpenPicker() {
+		setSaveAddressError("");
 		setIsPickerOpen(true);
 	}
 
@@ -78,22 +80,30 @@ export function useCartPage() {
 	}
 
 	function handleSaveAddress(lat: number, lng: number) {
-		createAddressFromCoords.mutate(
-			{
-				latitude: lat,
-				longitude: lng,
-				contactName: user?.fullName ?? "",
-				contactPhone: user?.phone ?? "",
-				isDefault: addresses.length === 0,
+		setSaveAddressError("");
+
+		// contactPhone backendda ^[+]?[0-9]{10,20}$ patterniga bo'ysunadi.
+		// Bo'sh yoki noto'g'ri qiymat 400 beradi — shuning uchun tozalab,
+		// faqat patternga mos bo'lsagina yuboramiz (yo'q bo'lsa — umuman yubormaymiz).
+		const cleanedPhone = (user?.phone ?? "").replace(/[^\d+]/g, "");
+		const body: CreateAddressFromCoordinatesReqDto = {
+			latitude: lat,
+			longitude: lng,
+			isDefault: addresses.length === 0,
+		};
+		if (user?.fullName) body.contactName = user.fullName;
+		if (/^[+]?[0-9]{10,20}$/.test(cleanedPhone)) body.contactPhone = cleanedPhone;
+
+		createAddressFromCoords.mutate(body, {
+			onSuccess: (res) => {
+				const newId = res.data?.id;
+				if (newId) setSelectedAddressId(newId);
+				setIsPickerOpen(false);
 			},
-			{
-				onSuccess: (res) => {
-					const newId = res.data?.id;
-					if (newId) setSelectedAddressId(newId);
-					setIsPickerOpen(false);
-				},
-			}
-		);
+			onError: (err) => {
+				setSaveAddressError(err instanceof Error ? err.message : "Manzilni saqlashda xato");
+			},
+		});
 	}
 
 	function handleApplyPromo() {
@@ -195,6 +205,7 @@ export function useCartPage() {
 		isOrdering: isProcessing,
 		isClearing: clearCart.isPending,
 		isSavingAddress: createAddressFromCoords.isPending,
+		saveAddressError,
 		subtotal,
 		discount,
 		total,
