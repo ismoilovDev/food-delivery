@@ -50,10 +50,11 @@ export default function OrderDetailPage() {
 		canCancel,
 		canRate,
 		deliveryAddress,
-		hasPayment,
+		showPayment,
 		isPaid,
 		canPay,
 		isPaying,
+		payError,
 		handlePay,
 		isCancelling,
 		isRatingOpen,
@@ -273,7 +274,7 @@ export default function OrderDetailPage() {
 					</div>
 
 					{/* Payment status (online to'lovlar) */}
-					{hasPayment && (
+					{showPayment && (
 						<div
 							className={`rounded-2xl px-4 py-3.5 flex items-center gap-3 ${
 								isPaid ? "bg-green-50" : "bg-amber-50"
@@ -330,6 +331,12 @@ export default function OrderDetailPage() {
 					{/* Actions */}
 					{(canCancel || canRate || canPay) && (
 						<div className="flex flex-col gap-2">
+							{payError && (
+								<div className="flex items-start gap-2 rounded-xl bg-red-50 px-3 py-2.5">
+									<X size={16} className="text-red-500 shrink-0 mt-0.5" />
+									<p className="text-xs text-red-600 leading-relaxed break-words">{payError}</p>
+								</div>
+							)}
 							{canPay && (
 								<button
 									type="button"
