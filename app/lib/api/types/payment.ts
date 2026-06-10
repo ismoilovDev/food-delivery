@@ -1,14 +1,18 @@
-export type PaymentMethod = "CASH" | "PAYME" | "CLICK" | "UZUM" | "CARD";
+export type PaymentMethod = "PAYME" | "CLICK" | "UZUM" | "CARD";
 
-export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "CANCELLED";
+export type PaymentStatus = "PENDING" | "COMPLETED" | "FAILED" | "REFUNDED" | "CANCELLED";
 
 export interface PaymentDto {
 	id: number;
-	orderId: number;
-	method: PaymentMethod;
 	amount: number;
 	status: PaymentStatus;
-	checkoutUrl?: string;
+	paymentMethod: PaymentMethod;
+	transactionId?: string;
+	receiptUrl?: string;
+	description?: string;
+	paidAt?: string;
+	failedAt?: string;
+	failureReason?: string;
 	createdAt: string;
 	updatedAt: string;
 }

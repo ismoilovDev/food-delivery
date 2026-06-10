@@ -13,6 +13,8 @@ export type OrderStatus =
 // Java LocalDateTime comes as [year, month, day, hour, minute, second, nanosecond]
 export type JavaDateTime = [number, number, number, number, number, number, number];
 
+export type DeliveryType = "DELIVERY" | "PICKUP";
+
 export interface OrderItemReqDto {
 	productId: number;
 	quantity: number;
@@ -20,11 +22,13 @@ export interface OrderItemReqDto {
 }
 
 export interface OrderReqDto {
-	deliveryAddressId: number;
+	deliveryType: DeliveryType;
 	items: OrderItemReqDto[];
-	notes?: string;
-	paymentMethod: import("./payment").PaymentMethod;
+	deliveryAddressId?: number;
+	deliveryNotes?: string;
 	promocodeCode?: string;
+	isPreorder?: boolean;
+	scheduledDeliveryTime?: string;
 }
 
 export interface OrderItemDto {
