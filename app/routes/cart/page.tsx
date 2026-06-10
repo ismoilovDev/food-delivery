@@ -54,6 +54,7 @@ export default function CartPage() {
 		handleClosePicker,
 		handleSaveAddress,
 		handlePlaceOrder,
+		saveAddressError,
 	} = useCartPage();
 
 	const paymentLabel = paymentMethod === "CASH" ? t.cart.cash : t.cart.payme;
@@ -217,6 +218,7 @@ export default function CartPage() {
 				onClose={handleClosePicker}
 				onSave={handleSaveAddress}
 				isSaving={isSavingAddress}
+				saveError={saveAddressError}
 				t={{
 					pickLocation: t.cart.pickLocation,
 					useCurrentLocation: t.cart.useCurrentLocation,
