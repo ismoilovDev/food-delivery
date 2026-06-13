@@ -57,7 +57,6 @@ export default function RestaurantsPage() {
 							restaurant={restaurant}
 							lang={lang}
 							t={t.restaurants}
-							sumLabel={t.common.sum}
 							isSelected={restaurant.id === selectedBranchId}
 							onSelect={() => handleSelect(restaurant)}
 						/>

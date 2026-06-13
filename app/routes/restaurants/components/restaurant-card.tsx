@@ -1,6 +1,6 @@
 import { Clock, Star, Store } from "lucide-react";
 import type { RestaurantDto } from "~/lib/api/types";
-import { formatLocalTime, formatPrice, isWithinWorkingHours } from "~/lib/format";
+import { formatLocalTime, isWithinWorkingHours } from "~/lib/format";
 import type { TranslationKeys } from "~/lib/i18n";
 import { type Lang, localName } from "~/lib/i18n";
 import { cn } from "~/lib/utils";
@@ -9,19 +9,11 @@ interface RestaurantCardProps {
 	restaurant: RestaurantDto;
 	lang: Lang;
 	t: TranslationKeys["restaurants"];
-	sumLabel: string;
 	isSelected: boolean;
 	onSelect: () => void;
 }
 
-export function RestaurantCard({
-	restaurant,
-	lang,
-	t,
-	sumLabel,
-	isSelected,
-	onSelect,
-}: RestaurantCardProps) {
+export function RestaurantCard({ restaurant, lang, t, isSelected, onSelect }: RestaurantCardProps) {
 	const isOpen =
 		restaurant.isOpen ??
 		isWithinWorkingHours(restaurant.workingHoursStart, restaurant.workingHoursEnd);
@@ -91,12 +83,6 @@ export function RestaurantCard({
 						{formatLocalTime(restaurant.workingHoursEnd)}
 					</span>
 				</div>
-
-				{restaurant.minOrderAmount > 0 && (
-					<p className="text-[11px] text-gray-500 truncate">
-						{t.minOrder}: {formatPrice(restaurant.minOrderAmount)} {sumLabel}
-					</p>
-				)}
 			</div>
 		</button>
 	);
