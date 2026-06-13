@@ -29,3 +29,28 @@ export function formatTime(date: JavaDateInput): string {
 	const d = toDate(date);
 	return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
+
+// Java LocalTime [hour, minute] -> "HH:mm"
+export function formatLocalTime(time?: [number, number] | null): string {
+	if (!time) return "";
+	const [hour = 0, minute = 0] = time;
+	return `${pad(hour)}:${pad(minute)}`;
+}
+
+// Joriy vaqt ish vaqti oralig'idami? Yarim tunni kesib o'tuvchi
+// oraliqlarni ham hisobga oladi (masalan, 22:00–02:00).
+export function isWithinWorkingHours(
+	start?: [number, number] | null,
+	end?: [number, number] | null
+): boolean {
+	if (!start || !end) return false;
+	const now = new Date();
+	const minutesNow = now.getHours() * 60 + now.getMinutes();
+	const startMin = start[0] * 60 + start[1];
+	const endMin = end[0] * 60 + end[1];
+
+	if (startMin === endMin) return true; // 24 soat ochiq
+	if (startMin < endMin) return minutesNow >= startMin && minutesNow < endMin;
+	// Yarim tunni kesib o'tadi (masalan, 22:00–02:00)
+	return minutesNow >= startMin || minutesNow < endMin;
+}

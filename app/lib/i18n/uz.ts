@@ -16,6 +16,20 @@ export const uz = {
 		profile: "Profil",
 	},
 
+	// Restaurants
+	restaurants: {
+		title: "Restoranlar",
+		subtitle: "Restoranni tanlang",
+		search: "Restoran qidirish...",
+		empty: "Restoranlar topilmadi",
+		change: "O'zgartirish",
+		open: "Ochiq",
+		closed: "Yopiq",
+		deliveryTime: "min",
+		minOrder: "Min. buyurtma",
+		freeDelivery: "Bepul yetkazib berish",
+	},
+
 	// Menu
 	menu: {
 		title: "Menyu",

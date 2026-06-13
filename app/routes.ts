@@ -4,6 +4,9 @@ export default [
 	// Splash / Auth
 	index("routes/auth/page.tsx"),
 
+	// Restoran tanlash (Bottom Nav'siz, to'liq ekran)
+	route("restaurants", "routes/restaurants/page.tsx"),
+
 	// Layout bilan sahifalar (Bottom Nav ko'rinadi)
 	layout("routes/layout.tsx", [
 		route("menu", "routes/menu/page.tsx"),

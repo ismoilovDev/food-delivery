@@ -7,6 +7,8 @@ export default function MenuPage() {
 	const {
 		t,
 		lang,
+		restaurantName,
+		goToRestaurants,
 		categories,
 		categoriesLoading,
 		displayProducts,
@@ -27,6 +29,8 @@ export default function MenuPage() {
 					searchQuery={searchQuery}
 					onSearchChange={setSearchQuery}
 					placeholder={t.menu.search}
+					restaurantName={restaurantName}
+					onChangeRestaurant={goToRestaurants}
 				/>
 				<CategoryTabs
 					categories={categories}

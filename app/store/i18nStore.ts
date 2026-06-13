@@ -17,6 +17,14 @@ export const useI18nStore = create<I18nState>()(
 		}),
 		{
 			name: "i18n-storage",
+			// Faqat `lang` saqlanadi. `t` har doim joriy koddan qayta hisoblanadi —
+			// aks holda eski saqlangan tarjima yangi kalitlarni (masalan, `restaurants`)
+			// bekor qilib, `undefined` xatolariga olib keladi.
+			partialize: (state) => ({ lang: state.lang }),
+			merge: (persisted, current) => {
+				const lang = (persisted as { lang?: Lang } | undefined)?.lang ?? current.lang;
+				return { ...current, lang, t: translations[lang] };
+			},
 		}
 	)
 );
