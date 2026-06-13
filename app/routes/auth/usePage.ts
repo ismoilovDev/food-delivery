@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { telegramAuth } from "~/lib/api/services/auth";
 import { getMe } from "~/lib/api/services/users";
 import { useAuthStore } from "~/store/authStore";
+import { useBranchStore } from "~/store/branchStore";
 import { useI18nStore } from "~/store/i18nStore";
 
 export type AuthStatus = "loading" | "error" | "no-telegram";
@@ -17,10 +18,15 @@ export function useAuthPage() {
 	const { setTokens, setUser, isAuthenticated } = useAuthStore();
 	const { t } = useI18nStore();
 
+	function goAfterAuth() {
+		const hasBranch = useBranchStore.getState().selectedBranch !== null;
+		navigate(hasBranch ? "/menu" : "/restaurants", { replace: true });
+	}
+
 	// biome-ignore lint/correctness/useExhaustiveDependencies: intentional mount-only effect
 	useEffect(() => {
 		if (isAuthenticated) {
-			navigate("/menu", { replace: true });
+			goAfterAuth();
 			return;
 		}
 		doAuth();
@@ -63,7 +69,7 @@ export function useAuthPage() {
 				// user info is not critical
 			}
 
-			navigate("/menu", { replace: true });
+			goAfterAuth();
 		} catch (err) {
 			setErrorMsg(err instanceof Error ? err.message : t.auth.authError);
 			setStatus("error");
@@ -86,7 +92,7 @@ export function useAuthPage() {
 		} catch {
 			// not critical
 		}
-		navigate("/menu", { replace: true });
+		goAfterAuth();
 	}
 
 	return { status, errorMsg, devToken, setDevToken, handleDevLogin, retry, t };

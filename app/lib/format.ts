@@ -29,3 +29,25 @@ export function formatTime(date: JavaDateInput): string {
 	const d = toDate(date);
 	return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
+
+// Java LocalTime [hour, minute] -> "HH:mm"
+export function formatLocalTime(time?: [number, number] | null): string {
+	if (!time) return "";
+	const [hour = 0, minute = 0] = time;
+	return `${pad(hour)}:${pad(minute)}`;
+}
+
+export function isWithinWorkingHours(
+	start?: [number, number] | null,
+	end?: [number, number] | null
+): boolean {
+	if (!start || !end) return false;
+	const now = new Date();
+	const minutesNow = now.getHours() * 60 + now.getMinutes();
+	const startMin = start[0] * 60 + start[1];
+	const endMin = end[0] * 60 + end[1];
+
+	if (startMin === endMin) return true;
+	if (startMin < endMin) return minutesNow >= startMin && minutesNow < endMin;
+	return minutesNow >= startMin || minutesNow < endMin;
+}

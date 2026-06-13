@@ -17,6 +17,11 @@ export const useI18nStore = create<I18nState>()(
 		}),
 		{
 			name: "i18n-storage",
+			partialize: (state) => ({ lang: state.lang }),
+			merge: (persisted, current) => {
+				const lang = (persisted as { lang?: Lang } | undefined)?.lang ?? current.lang;
+				return { ...current, lang, t: translations[lang] };
+			},
 		}
 	)
 );

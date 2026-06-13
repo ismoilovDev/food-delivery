@@ -31,11 +31,8 @@ export function useOrderDetailPage() {
 	const canCancel = !!order && CANCELLABLE_STATUSES.includes(order.status);
 	const canRate = !!order && RATABLE_STATUSES.includes(order.status) && !order.rating;
 
-	// To'lov holati. order.isPaid yoki payment.status=COMPLETED = to'langan.
 	const isPaid = order?.isPaid === true || payment?.status === "COMPLETED";
 	const isOrderDead = order?.status === "CANCELLED" || order?.status === "REJECTED";
-	// Faqat Payme. To'lanmagan va bekor bo'lmagan har qanday buyurtmani to'lash mumkin
-	// (to'lov yozuvi hali yaratilmagan bo'lsa ham — handlePay uni boshlaydi).
 	const showPayment = !!order && !isOrderDead;
 	const canPay = showPayment && !isPaid;
 

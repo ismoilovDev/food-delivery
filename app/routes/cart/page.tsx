@@ -105,7 +105,7 @@ export default function CartPage() {
 						))}
 					</div>
 
-					{/* Payment method — hozircha faqat Payme */}
+					{/* Payment method */}
 					<div className="bg-white rounded-2xl shadow-sm overflow-hidden">
 						<div className="px-4 pt-3.5 pb-2">
 							<h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">

@@ -2,18 +2,24 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { BottomNav } from "~/components/bottom-nav";
 import { useAuthStore } from "~/store/authStore";
+import { useBranchStore } from "~/store/branchStore";
 
 export default function AppLayout() {
 	const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+	const selectedBranch = useBranchStore((s) => s.selectedBranch);
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!isAuthenticated) {
 			navigate("/", { replace: true });
+			return;
 		}
-	}, [isAuthenticated, navigate]);
+		if (!selectedBranch) {
+			navigate("/restaurants", { replace: true });
+		}
+	}, [isAuthenticated, selectedBranch, navigate]);
 
-	if (!isAuthenticated) return null;
+	if (!isAuthenticated || !selectedBranch) return null;
 
 	return (
 		<div className="min-h-screen bg-gray-50 pb-16">

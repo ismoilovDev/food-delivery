@@ -16,6 +16,20 @@ export const ru = {
 		profile: "Профиль",
 	},
 
+	// Restaurants
+	restaurants: {
+		title: "Рестораны",
+		subtitle: "Выберите ресторан",
+		search: "Поиск ресторана...",
+		empty: "Рестораны не найдены",
+		change: "Изменить",
+		open: "Открыто",
+		closed: "Закрыто",
+		deliveryTime: "мин",
+		minOrder: "Мин. заказ",
+		freeDelivery: "Бесплатная доставка",
+	},
+
 	// Menu
 	menu: {
 		title: "Меню",

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router";
 import {
 	useAddCartItem,
 	useCart,
@@ -7,25 +8,28 @@ import {
 } from "~/lib/api/hooks/useCart";
 import { useRootCategories } from "~/lib/api/hooks/useCategories";
 import { useProducts } from "~/lib/api/hooks/useProducts";
-import { RESTAURANT_ID } from "~/lib/config";
 import { localName } from "~/lib/i18n";
+import { useBranchStore } from "~/store/branchStore";
 import { useI18nStore } from "~/store/i18nStore";
 
 export function useMenuPage() {
 	const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 	const [searchQuery, setSearchQuery] = useState("");
 
+	const navigate = useNavigate();
 	const { t, lang } = useI18nStore();
+	const selectedBranch = useBranchStore((s) => s.selectedBranch);
+	const restaurantId = selectedBranch?.id;
 
 	const { data: categories, isLoading: categoriesLoading } = useRootCategories();
 
 	const { data: products, isLoading: productsLoading } = useProducts({
 		categoryId: selectedCategoryId ?? undefined,
-		restaurantId: RESTAURANT_ID,
+		restaurantId,
 	});
 
 	// All products (no category filter) — used for client-side search
-	const { data: allProducts } = useProducts({ restaurantId: RESTAURANT_ID });
+	const { data: allProducts } = useProducts({ restaurantId });
 
 	const { data: cart } = useCart();
 	const addCartItem = useAddCartItem();
@@ -78,6 +82,8 @@ export function useMenuPage() {
 	return {
 		t,
 		lang,
+		restaurantName: localName(selectedBranch?.name, lang),
+		goToRestaurants: () => navigate("/restaurants"),
 		categories,
 		categoriesLoading,
 		displayProducts,
