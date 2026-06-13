@@ -37,8 +37,6 @@ export function formatLocalTime(time?: [number, number] | null): string {
 	return `${pad(hour)}:${pad(minute)}`;
 }
 
-// Joriy vaqt ish vaqti oralig'idami? Yarim tunni kesib o'tuvchi
-// oraliqlarni ham hisobga oladi (masalan, 22:00–02:00).
 export function isWithinWorkingHours(
 	start?: [number, number] | null,
 	end?: [number, number] | null
@@ -49,8 +47,7 @@ export function isWithinWorkingHours(
 	const startMin = start[0] * 60 + start[1];
 	const endMin = end[0] * 60 + end[1];
 
-	if (startMin === endMin) return true; // 24 soat ochiq
+	if (startMin === endMin) return true;
 	if (startMin < endMin) return minutesNow >= startMin && minutesNow < endMin;
-	// Yarim tunni kesib o'tadi (masalan, 22:00–02:00)
 	return minutesNow >= startMin || minutesNow < endMin;
 }

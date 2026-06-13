@@ -22,7 +22,7 @@ export function getAccessToken() {
 	return accessToken;
 }
 
-// ─── Request interceptor — Bearer token qo'shish ─────────────────────────────
+// ─── Request interceptor ─────────────────────────────────────────────────────
 
 api.interceptors.request.use((config) => {
 	if (accessToken) {
@@ -43,7 +43,6 @@ api.interceptors.response.use(
 
 			if (status === 401) {
 				setAccessToken(null);
-				// Token muddati tugagan — login sahifasiga yo'naltirish
 				if (typeof window !== "undefined") {
 					window.location.href = "/";
 				}

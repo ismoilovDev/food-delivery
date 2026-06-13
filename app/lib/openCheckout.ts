@@ -14,7 +14,7 @@ export function openCheckout(url: string) {
 			return;
 		}
 	} catch {
-		// openLink mavjud emas — fallback
+		// fallback below
 	}
 	window.location.href = url;
 }

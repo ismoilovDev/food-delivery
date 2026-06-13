@@ -25,9 +25,6 @@ export function useRestaurantsPage() {
 	}, [restaurants, searchQuery, lang]);
 
 	function handleSelect(restaurant: RestaurantDto) {
-		// Boshqa restoran tanlanganda savatcha eski restoran mahsulotlaridan iborat
-		// bo'lib qolmasligi uchun tozalanadi (buyurtma restorani savatdagi
-		// mahsulotlardan aniqlanadi — backend OrderReqDto'da restaurantId yo'q).
 		if (selectedBranch && selectedBranch.id !== restaurant.id) {
 			clearCart.mutate();
 		}

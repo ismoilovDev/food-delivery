@@ -14,7 +14,6 @@ export default function AppLayout() {
 			navigate("/", { replace: true });
 			return;
 		}
-		// Restoran tanlanmagan bo'lsa — menyu/savatcha mantiqsiz, tanlashga yo'naltiramiz.
 		if (!selectedBranch) {
 			navigate("/restaurants", { replace: true });
 		}

@@ -18,7 +18,6 @@ export function useAuthPage() {
 	const { setTokens, setUser, isAuthenticated } = useAuthStore();
 	const { t } = useI18nStore();
 
-	// Restoran tanlangan bo'lsa menyuga, aks holda restoran tanlash sahifasiga.
 	function goAfterAuth() {
 		const hasBranch = useBranchStore.getState().selectedBranch !== null;
 		navigate(hasBranch ? "/menu" : "/restaurants", { replace: true });

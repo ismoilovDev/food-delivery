@@ -273,7 +273,7 @@ export default function OrderDetailPage() {
 						</div>
 					</div>
 
-					{/* Payment status (online to'lovlar) */}
+					{/* Payment status */}
 					{showPayment && (
 						<div
 							className={`rounded-2xl px-4 py-3.5 flex items-center gap-3 ${

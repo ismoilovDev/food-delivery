@@ -81,9 +81,6 @@ export function useCartPage() {
 	function handleSaveAddress(lat: number, lng: number) {
 		setSaveAddressError("");
 
-		// contactPhone backendda ^[+]?[0-9]{10,20}$ patterniga bo'ysunadi.
-		// Bo'sh yoki noto'g'ri qiymat 400 beradi — shuning uchun tozalab,
-		// faqat patternga mos bo'lsagina yuboramiz (yo'q bo'lsa — umuman yubormaymiz).
 		const cleanedPhone = (user?.phone ?? "").replace(/[^\d+]/g, "");
 		const body: CreateAddressFromCoordinatesReqDto = {
 			latitude: lat,
@@ -127,8 +124,6 @@ export function useCartPage() {
 		if (!cart || !resolvedSelectedId) return;
 		setOrderError("");
 
-		// Buyurtma yaratish (DELIVERY). Backend OrderReqDto: deliveryType majburiy,
-		// paymentMethod yo'q — to'lov alohida /payments/initiate orqali boshlanadi.
 		createOrder.mutate(
 			{
 				deliveryType: "DELIVERY",
@@ -148,7 +143,6 @@ export function useCartPage() {
 						return;
 					}
 
-					// Hozircha faqat Payme. To'lovni boshlab, checkout URL'ni ochamiz.
 					initiatePayment.mutate(
 						{ orderId, method: "PAYME" },
 						{
@@ -158,8 +152,6 @@ export function useCartPage() {
 								navigate(`/orders/${orderId}`);
 							},
 							onError: () => {
-								// Order yaratildi, lekin to'lov boshlanmadi —
-								// foydalanuvchi buyurtma sahifasida qayta urinishi mumkin.
 								navigate(`/orders/${orderId}`);
 							},
 						}

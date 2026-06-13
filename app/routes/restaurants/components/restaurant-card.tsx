@@ -22,8 +22,6 @@ export function RestaurantCard({
 	isSelected,
 	onSelect,
 }: RestaurantCardProps) {
-	// Backend `isOpen` ni null qaytarishi mumkin — bunday holda holatni ish
-	// vaqtidan hisoblaymiz. Aniq true/false bo'lsa, qo'lda qo'yilgan flagga ishonamiz.
 	const isOpen =
 		restaurant.isOpen ??
 		isWithinWorkingHours(restaurant.workingHoursStart, restaurant.workingHoursEnd);

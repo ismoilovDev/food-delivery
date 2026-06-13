@@ -1,6 +1,5 @@
 import type { I18nText } from "./common";
 
-// Java LocalTime [hour, minute] sifatida keladi (masalan, [8, 0], [23, 30]).
 export type JavaLocalTime = [number, number];
 
 export interface RestaurantDto {
