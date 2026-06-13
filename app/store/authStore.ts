@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { UserProfileDto } from "~/lib/api/types";
-import { setAccessToken } from "~/lib/axios";
+import { registerAuthBridge, setAccessToken } from "~/lib/axios";
 
 interface AuthState {
 	token: string | null;
@@ -43,3 +43,12 @@ export const useAuthStore = create<AuthState>()(
 		}
 	)
 );
+
+// Let the axios layer read the refresh token and write back refreshed tokens /
+// trigger logout, without axios importing this store (avoids a circular import).
+registerAuthBridge({
+	getRefreshToken: () => useAuthStore.getState().refreshToken,
+	onRefreshed: ({ accessToken, refreshToken }) =>
+		useAuthStore.getState().setTokens(accessToken, refreshToken),
+	onLogout: () => useAuthStore.getState().logout(),
+});

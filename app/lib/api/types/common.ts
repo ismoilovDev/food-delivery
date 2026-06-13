@@ -26,7 +26,6 @@ export interface Pagination {
 	perPage: number;
 }
 
-/** Ko'p tilli matn maydoni */
 export interface I18nText {
 	uz: string;
 	ru: string;
